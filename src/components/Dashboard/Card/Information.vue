@@ -18,11 +18,11 @@
     </div>
 
     <div class="mt-8">
-      <p class="text-[24px] leading-none font-semibold text-primary-900">
+      <p class="text-[24px] leading-none font-normal text-primary-900">
         {{ value }}
       </p>
 
-      <p class="mt-2 text-[12px] text-gray-500">
+      <p class="mt-2 text-[12px] font-medium text-gray-500">
         {{ description }}
       </p>
     </div>

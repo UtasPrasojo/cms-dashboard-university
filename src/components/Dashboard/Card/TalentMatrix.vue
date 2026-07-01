@@ -1,94 +1,115 @@
 <template>
-  <div
-    class="rounded-3xl   p-5 h-full flex flex-col justify-between transition-all"
-    :class="variantClass.bg"
-  >
-    <div class="flex justify-between items-start">
-      <div>
-        <p
-          class="text-xl font-medium"
-          :class="variantClass.text"
-        >
-          {{ title }}
-        </p>
+    <div class="bg-base-white p-4 rounded-3xl mb-4">
+        <div class="flex justify-between items-center pb-4">
+            <p>9-Box Talent Matrix</p>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" width="16" height="16" class="shrink-0 text-primary-900">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
+            </svg>
+        </div>
+        <div class="flex gap-3">
+            <!-- Label vertikal: IQ Tinggi / Sedang / Rendah -->
+            <div class="flex flex-col justify-between pt-8 pb-16">
+                <span class="[writing-mode:vertical-rl] rotate-180 text-[12px] text-primary-900 whitespace-nowrap">
+                    IQ Tinggi
+                </span>
+                <span class="[writing-mode:vertical-rl] rotate-180 text-[12px] text-primary-900 whitespace-nowrap">
+                    IQ Sedang
+                </span>
+                <span class="[writing-mode:vertical-rl] rotate-180 text-[12px] text-primary-900 whitespace-nowrap">
+                    IQ Rendah
+                </span>
+            </div>
 
-        <h2
-          class="text-5xl font-semibold mt-2"
-          :class="variantClass.text"
-        >
-          {{ value }}
-        </h2>
-      </div>
+            <div class="flex-1">
+                <div class="grid grid-cols-3 gap-4">
+                    <div v-for="(card, index) in cards" :key="index"
+                        class="rounded-3xl p-5 h-full flex flex-col justify-between transition-all"
+                        :class="getVariant(card.variant).bg">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <p class="text-[12px] font-normal" :class="getVariant(card.variant).text">
+                                    {{ card.title }}
+                                </p>
 
-      <div
-        class="w-11 h-11 rounded-full flex items-center justify-center shadow-md"
-        :class="variantClass.iconBg"
-      >
-        <component
-          :is="icon"
-          class="w-6 h-6 text-white"
-        />
-      </div>
+                                <h2 class="text-[24px] font-medium mt-2" :class="getVariant(card.variant).text">
+                                    {{ card.value }}
+                                </h2>
+                            </div>
+
+                            <div v-if="card.icon"
+                                class="w-11 h-11 rounded-full flex items-center justify-center shadow-md"
+                                :class="getVariant(card.variant).iconBg">
+                                <component :is="card.icon" class="w-6 h-6 text-white" />
+                            </div>
+                        </div>
+
+                        <p class="text-[12px]" :class="getVariant(card.variant).text">
+                            {{ card.iq }} • {{ card.ipk }}
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Label horizontal: IPK Rendah / Sedang / Tinggi -->
+                <div class="grid grid-cols-3 gap-4 mt-4">
+                    <span class="text-[12px] text-primary-900 text-center">IPK Rendah</span>
+                    <span class="text-[12px] text-primary-900 text-center">IPK Sedang</span>
+                    <span class="text-[12px] text-primary-900 text-center">IPK Tinggi</span>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <p
-      class="text-lg"
-      :class="variantClass.text"
-    >
-      {{ iq }} • {{ ipk }}
-    </p>
-  </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+export type TalentVariant = 'orange' | 'blue' | 'green' | 'purple' | 'red' | 'default'
 
-const props = defineProps({
-  title: String,
-  value: [String, Number],
-  iq: String,
-  ipk: String,
-  icon: Object,
-  variant: {
-    type: String,
-    default: 'default',
-  },
-})
-
-const variants = {
-  orange: {
-    bg: 'bg-orange-50',
-    text: 'text-orange-600',
-    iconBg: 'bg-orange-400',
-  },
-  blue: {
-    bg: 'bg-indigo-100',
-    text: 'text-blue-700',
-    iconBg: 'bg-blue-600',
-  },
-  green: {
-    bg: 'bg-teal-50',
-    text: 'text-teal-600',
-    iconBg: 'bg-teal-500',
-  },
-  purple: {
-    bg: 'bg-violet-100',
-    text: 'text-violet-500',
-    iconBg: 'bg-violet-500',
-  },
-  red: {
-    bg: 'bg-red-100',
-    text: 'text-red-500',
-    iconBg: 'bg-red-500',
-  },
-  default: {
-    bg: 'bg-[#F4F4F4]',
-    text: 'text-slate-800',
-    iconBg: 'bg-gray-400',
-  },
+export interface TalentCard {
+    title: string
+    value: string | number
+    iq: string
+    ipk: string
+    icon?: object
+    variant?: TalentVariant
 }
 
-const variantClass = computed(() => {
-  return variants[props.variant as keyof typeof variants]
-})
+defineProps<{
+    cards: TalentCard[]
+}>()
+
+const variants = {
+    orange: {
+        bg: 'bg-orange-50',
+        text: 'text-orange-600',
+        iconBg: 'bg-orange-400',
+    },
+    blue: {
+        bg: 'bg-indigo-100',
+        text: 'text-blue-700',
+        iconBg: 'bg-blue-600',
+    },
+    green: {
+        bg: 'bg-teal-50',
+        text: 'text-teal-600',
+        iconBg: 'bg-teal-500',
+    },
+    purple: {
+        bg: 'bg-violet-100',
+        text: 'text-violet-500',
+        iconBg: 'bg-violet-500',
+    },
+    red: {
+        bg: 'bg-red-100',
+        text: 'text-red-500',
+        iconBg: 'bg-red-500',
+    },
+    default: {
+        bg: 'bg-[#F4F4F4]',
+        text: 'text-slate-800',
+        iconBg: 'bg-gray-400',
+    },
+}
+
+const getVariant = (variant?: TalentVariant) => variants[variant ?? 'default']
 </script>

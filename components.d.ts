@@ -38,6 +38,8 @@ declare module 'vue' {
     ButtonTabSlotBadge: typeof import('./src/components/Button/TabSlotBadge.vue')['default']
     ButtonWhite: typeof import('./src/components/Button/White.vue')['default']
     ButtonWhiteOutline: typeof import('./src/components/Button/WhiteOutline.vue')['default']
+    DashboardCardArchetypePersonality: typeof import('./src/components/Dashboard/Card/ArchetypePersonality.vue')['default']
+    DashboardCardCampusReferal: typeof import('./src/components/Dashboard/Card/CampusReferal.vue')['default']
     DashboardCardInformation: typeof import('./src/components/Dashboard/Card/Information.vue')['default']
     DashboardCardTalentMatrix: typeof import('./src/components/Dashboard/Card/TalentMatrix.vue')['default']
     FormLoginForm: typeof import('./src/components/Form/LoginForm.vue')['default']

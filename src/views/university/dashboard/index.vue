@@ -16,13 +16,14 @@
                     <DashboardCardInformation v-for="(card, index) in cards" :key="index" :title="card.title"
                         :value="card.value" :description="card.description" :icon="card.icon" />
                 </div>
-                <div class="grid grid-cols-3 p-4 bg-base-white rounded-3xl gap-4">
-                    <DashboardCardTalentMatrix v-for="(card, index) in cardsTalent" :key="index" v-bind="card" />
-
-                </div>
+                <DashboardCardTalentMatrix :cards="cardsTalent" />
+                <DashboardCardArchetypePersonality />
             </div>
 
-            <div class="w-1/4"></div>
+            <div class="w-1/4">
+                <DashboardCardCampusReferal :title="referral.title" :code="referral.code"
+                    :description="referral.description" />
+            </div>
         </div>
     </div>
 </template>
@@ -41,6 +42,7 @@ import {
     HandThumbUpIcon,
     ExclamationTriangleIcon,
 } from '@heroicons/vue/24/solid'
+import type { TalentCard } from '@/components/Dashboard/Card/TalentMatrix.vue'
 
 
 const cards = [
@@ -69,7 +71,7 @@ const cards = [
         icon: ChartBarIcon,
     },
 ]
-const cardsTalent = [
+const cardsTalent: TalentCard[] = [
     {
         title: 'Potensi tersembunyi',
         value: 147,
@@ -139,4 +141,11 @@ const cardsTalent = [
         variant: 'default',
     },
 ]
+
+const referral = {
+    title: 'Kode referral kampus',
+    code: 'UDGH8738',
+    description:
+        'Kode referral kampus digunakan oleh mahasiswa untuk terhubung atau terafiliasi dengan kampus.',
+}
 </script>

@@ -20,9 +20,22 @@
                 <DashboardCardArchetypePersonality />
             </div>
 
-            <div class="w-1/4">
+            <div class="w-1/4 h-full flex flex-col">
                 <DashboardCardCampusReferal :title="referral.title" :code="referral.code"
                     :description="referral.description" />
+                <DashboardCardFindIndustry title="Industri Paling Aktif Mencari" :industries="industries" />
+                <div class="flex-1 flex flex-col">
+                    <DashboardCardTalentpoolStatistic title="Statistik Talent Pool" :talentpool="talentpool" />
+                </div>
+            </div>
+        </div>
+        <div class="relative z-10 w-full flex">
+            <div class="w-full grid grid-cols-2 gap-4 px-4">
+                <DashboardCardCognitiveProfile :summary="cognitiveSummary" :highlights="highlightAspects"
+                    :bars="cognitiveBars" />
+                <DashboardCardCareerRead :score="careerReadiness.score" :status="careerReadiness.status"
+                    :description="careerReadiness.description" :strongest="careerReadiness.strongest"
+                    :improvement="careerReadiness.improvement" />
             </div>
         </div>
     </div>
@@ -43,6 +56,7 @@ import {
     ExclamationTriangleIcon,
 } from '@heroicons/vue/24/solid'
 import type { TalentCard } from '@/components/Dashboard/Card/TalentMatrix.vue'
+import { CpuChipIcon } from '@heroicons/vue/24/outline'
 
 
 const cards = [
@@ -147,5 +161,128 @@ const referral = {
     code: 'UDGH8738',
     description:
         'Kode referral kampus digunakan oleh mahasiswa untuk terhubung atau terafiliasi dengan kampus.',
+}
+
+const industries = [
+    {
+        name: 'Teknologi & IT',
+        total: '1.247',
+    },
+    {
+        name: 'Perbankan',
+        total: '894',
+    },
+    {
+        name: 'Konsultan',
+        total: '567',
+    },
+    {
+        name: 'Media & Kreatif',
+        total: '312',
+    },
+]
+const talentpool = [
+    {
+        name: 'Mahasiswa aktif di Talent Pool',
+        total: '1.247',
+    },
+    {
+        name: 'Total kunjungan profile oleh perusahaan',
+        total: '894',
+    },
+    {
+        name: 'Rata-rata profile dilihat per mahasiswa',
+        total: '567',
+    },
+    {
+        name: 'Mahasiswa masuk shortlist perusahaan',
+        total: '312',
+    },
+]
+
+
+
+const cognitiveSummary = {
+    averageIQ: 112,
+    icon: CpuChipIcon,
+}
+
+const highlightAspects = [
+    {
+        rank: 1,
+        title: 'Verbal',
+    },
+    {
+        rank: 2,
+        title: 'Penalaran Abstrak',
+    },
+    {
+        rank: 3,
+        title: 'Spasial',
+    },
+]
+
+const cognitiveBars = [
+    {
+        label: 'Verbal',
+        value: 115,
+        active: true,
+    },
+    {
+        label: 'P. Logis',
+        value: 80,
+        active: false,
+    },
+    {
+        label: 'P. Abstrak',
+        value: 118,
+        active: true,
+    },
+    {
+        label: 'Berpikir\nKritis',
+        value: 104,
+        active: false,
+    },
+    {
+        label: 'Penguasaan\nNumerik',
+        value: 20,
+        active: false,
+    },
+    {
+        label: 'Komputasi',
+        value: 106,
+        active: false,
+    },
+    {
+        label: 'Wacana',
+        value: 101,
+        active: false,
+    },
+    {
+        label: 'Spasial',
+        value: 111,
+        active: true,
+    },
+]
+
+const careerReadiness = {
+    score: 80,
+
+    status: 'Cukup Siap',
+
+    description:
+        'Rata-rata mahasiswa memiliki fondasi yang baik, namun masih perlu pengembangan pada kelengkapan CV dan keselarasan minat-bakat.',
+
+    strongest: {
+        title: 'Skor Kognitif',
+        subtitle: 'Rata-rata IQ',
+        value: '112',
+    },
+
+    improvement: {
+        title: 'Kelengkapan CV',
+        subtitle: 'Belum lengkap CV',
+        value: '32%',
+    },
 }
 </script>

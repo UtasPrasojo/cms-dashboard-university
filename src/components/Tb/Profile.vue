@@ -1,6 +1,6 @@
 <template>
   <TbData
-    class="bg-base-white sticky left-0 z-[9] align-top after:absolute after:top-0 after:right-0 after:h-full after:w-px after:bg-border-300"
+    class="sticky left-0 z-[9] align-top after:absolute after:top-0 after:right-0 after:h-full after:w-px "
   >
     <div class="flex flex-row gap-2 items-center relative">
       <div
@@ -15,8 +15,7 @@
         </p>
       </div>
 
-      <!-- Image container -->
-      <div
+      <!-- <div
         v-if="imageUrl && !imageError"
         class="h-8 w-8 shrink-0 rounded-full border border-primary-200 overflow-hidden flex items-center justify-center"
       >
@@ -30,7 +29,7 @@
         />
       </div>
 
-      <!-- Error state -->
+    
       <div
         v-else-if="imageUrl && imageError"
         @mouseover="statusTooltip = true"
@@ -51,7 +50,7 @@
         </svg>
       </div>
 
-      <!-- No image / initial state -->
+   
       <div
         v-else
         class="h-8 w-8 shrink-0 rounded-full bg-primary-500 overflow-hidden flex items-center justify-center"
@@ -59,7 +58,7 @@
         <p class="font-semibold text-sm text-base-white">
           {{ $initial(name) }}
         </p>
-      </div>
+      </div> -->
 
       <div class="min-w-0">
         <p class="text-xs md:text-sm font-bold text-base-black truncate">

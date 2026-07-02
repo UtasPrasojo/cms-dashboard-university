@@ -17,7 +17,7 @@ const props = defineProps({
 const listType = {
   data: "bg-[#F9FBFE] hover:bg-primary-50 [&>td:first-child]:rounded-l-2xl [&>td:last-child]:rounded-r-2xl",
   static: "bg-base-white",
-  head: "bg-base-dark/90 text-base-white font-normal [&>th:first-child]:rounded-l-2xl [&>th:last-child]:rounded-r-2xl",
+  head: "bg-[#F4F4F5] text-base-dark font-normal [&>th:first-child]:rounded-l-2xl [&>th:last-child]:rounded-r-2xl",
 };
 
 const typeClass = computed(() => {

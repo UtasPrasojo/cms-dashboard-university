@@ -64,7 +64,7 @@
         <p class="text-xs md:text-sm font-bold text-base-black truncate">
           {{ name ?? "-" }}
         </p>
-        <p v-if="subtitle" class="text-xs text-base-grey truncate">
+        <p v-if="subtitle" class="text-xs text-primary-500 truncate">
           {{ subtitle }}
         </p>
       </div>

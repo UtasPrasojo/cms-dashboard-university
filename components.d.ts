@@ -43,6 +43,7 @@ declare module 'vue' {
     DashboardCardCareerRead: typeof import('./src/components/Dashboard/Card/CareerRead.vue')['default']
     DashboardCardCognitiveProfil: typeof import('./src/components/Dashboard/Card/CognitiveProfil.vue')['default']
     DashboardCardCognitiveProfile: typeof import('./src/components/Dashboard/Card/CognitiveProfile.vue')['default']
+    DashboardCardDistribution: typeof import('./src/components/Dashboard/Card/Distribution.vue')['default']
     DashboardCardFindIndustry: typeof import('./src/components/Dashboard/Card/FindIndustry.vue')['default']
     DashboardCardInformation: typeof import('./src/components/Dashboard/Card/Information.vue')['default']
     DashboardCardTalentMatrix: typeof import('./src/components/Dashboard/Card/TalentMatrix.vue')['default']

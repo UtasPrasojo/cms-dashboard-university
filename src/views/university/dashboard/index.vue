@@ -38,6 +38,9 @@
                     :improvement="careerReadiness.improvement" />
             </div>
         </div>
+        <div class="relative z-10 w-full px-4 mt-4 mb-4">
+            <DashboardCardDistribution :data="prodiDistribution" />
+        </div>
     </div>
 </template>
 <script setup lang="ts">
@@ -57,6 +60,7 @@ import {
 } from '@heroicons/vue/24/solid'
 import type { TalentCard } from '@/components/Dashboard/Card/TalentMatrix.vue'
 import { CpuChipIcon } from '@heroicons/vue/24/outline'
+import type { ProdiDistribution } from '@/components/Dashboard/Card/Distribution.vue'
 
 
 const cards = [
@@ -285,4 +289,52 @@ const careerReadiness = {
         value: '32%',
     },
 }
+
+const prodiDistribution: ProdiDistribution[] = [
+  {
+    name: 'Teknik Informatika',
+    totalMahasiswa: 1247,
+    cvLengkap: 82,
+    selesaiAsesmen: 78,
+    careerReadiness: 923,
+    alignmentMinat: 74,
+    posisi: 'baik',
+  },
+  {
+    name: 'Psikologi',
+    totalMahasiswa: 743,
+    cvLengkap: 76,
+    selesaiAsesmen: 71,
+    careerReadiness: 498,
+    alignmentMinat: 67,
+    posisi: 'baik',
+  },
+  {
+    name: 'Ilmu Hukum',
+    totalMahasiswa: 892,
+    cvLengkap: 23,
+    selesaiAsesmen: 58,
+    careerReadiness: 518,
+    alignmentMinat: 52,
+    posisi: 'perhatian',
+  },
+  {
+    name: 'Komunikasi',
+    totalMahasiswa: 621,
+    cvLengkap: 79,
+    selesaiAsesmen: 68,
+    careerReadiness: 391,
+    alignmentMinat: 63,
+    posisi: 'perhatian',
+  },
+  {
+    name: 'Akuntansi',
+    totalMahasiswa: 344,
+    cvLengkap: 61,
+    selesaiAsesmen: 49,
+    careerReadiness: 175,
+    alignmentMinat: 44,
+    posisi: 'prioritas',
+  },
+]
 </script>

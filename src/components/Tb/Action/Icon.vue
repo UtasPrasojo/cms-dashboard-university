@@ -1,5 +1,5 @@
 <template>
-  <button type="button" :title="title" class="grid place-items-center group w-[21px] h-[21px] rounded-[4px]" :class="colors[type]">
+  <button type="button" :title="title" class="grid place-items-center group w-[24px] h-[24px] rounded-full border border-border-300" :class="colors[type]">
     <i :class="[icon, textColors[type]]" class="group-hover:text-primary-100 text-xs mt-0.5 !leading-none" />
   </button>
 </template>
@@ -33,6 +33,7 @@ const colors = {
   information: "bg-information-100 hover:bg-information-500 disabled:bg-information-100",
   warning: "bg-warning-100 hover:bg-warning-500 disabled:bg-warning-100",
   error: "bg-error-100 hover:bg-error-500 disabled:bg-error-100",
+  netral: "bg-white hover:bg-gray-200 disabled:bg-neutral-100",
 };
 
 const textColors = {
@@ -41,5 +42,6 @@ const textColors = {
   information: "text-information-500 group-disabled:text-information-300",
   warning: "text-warning-600 group-disabled:text-warning-300",
   error: "text-error-500 group-disabled:text-error-300",
+  netral: "text-base-dark group-disabled:text-text-dark",
 };
 </script>

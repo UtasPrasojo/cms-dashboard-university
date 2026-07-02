@@ -48,6 +48,7 @@ declare module 'vue' {
     DashboardCardInformation: typeof import('./src/components/Dashboard/Card/Information.vue')['default']
     DashboardCardTalentMatrix: typeof import('./src/components/Dashboard/Card/TalentMatrix.vue')['default']
     DashboardCardTalentpoolStatistic: typeof import('./src/components/Dashboard/Card/TalentpoolStatistic.vue')['default']
+    DashboardTableManagementStudent: typeof import('./src/components/Dashboard/Table/ManagementStudent.vue')['default']
     FormLoginForm: typeof import('./src/components/Form/LoginForm.vue')['default']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
     InputCheck: typeof import('./src/components/Input/Check.vue')['default']

@@ -4,150 +4,92 @@
       {{ label }}<span class="text-red-500" v-if="required">*</span>
     </p>
     <div v-if="!disabled" class="relative">
-      <button
-        ref="dropdown_button"
-        type="button"
-        :disabled="disabled"
-        class="flex px-3 w-full py-2 font-medium text-xs md:text-sm border border-border-400 rounded-lg text-text-500"
-        :class="[computedClass]"
-        @click="openModal()"
-        @keydown="handleButtonKeydown"
-      >
+      <button ref="dropdown_button" type="button" :disabled="disabled"
+        class="flex px-3 w-full py-2 font-medium text-xs md:text-sm border border-border-200 rounded-3xl text-text-500"
+        :class="[computedClass]" @click="openModal()" @keydown="handleButtonKeydown">
         <div class="flex justify-between w-full text-xs md:text-sm">
-          <div class="flex items-center gap-1">
-            <p class="text-start">{{ displayLabel }}</p>
+          <div class="flex items-center gap-1 pr-1">
+            <p class="text-start text-[#6E6E6E]">Show : {{ displayLabel }}</p>
             <div
-              class="flex items-center bg-information-100 text-information-500 rounded-lg text-xs md:text-sm px-3 py-1 font-semibold"
-              v-if="selected?.desc"
-            >
+              class="flex items-center bg-[information-100] text-information-500 rounded-lg text-xs md:text-sm px-3 py-1 font-semibold"
+              v-if="selected?.desc">
               {{ selected?.desc }}
             </div>
           </div>
-          <i
-            v-if="!disabled"
-            class="inline-flex items-center justify-center"
-            :class="[icon ? `fi ${icon}` : `fi fi-rr-angle-small-down ${show ? 'rotate-180' : ''}`]"
-          ></i>
+          <div class="flex justify-center items-center w-6 h-6 rounded-full bg-base-dark">
+            <i v-if="!disabled" class="inline-flex items-center justify-center text-white"
+              :class="[icon ? `fi ${icon}` : `fi fi-rr-angle-small-down ${show ? 'rotate-180' : ''}`] "></i>
+          </div>
         </div>
       </button>
       <div class="w-full h-full absolute top-0 px-[1px] pointer-events-none">
-        <input
-          @invalid="handleInvalid()"
-          :disabled="disabled"
-          type="text"
-          class="input-style pointer-events-none"
-          tabindex="-1"
-          :required="required"
-          :name="label"
-          :value="modelValue"
-        />
+        <input @invalid="handleInvalid()" :disabled="disabled" type="text" class="input-style pointer-events-none"
+          tabindex="-1" :required="required" :name="label" :value="modelValue" />
       </div>
     </div>
-    <div v-else class="relative flex px-3 w-full py-2 font-medium text-xs md:text-sm border border-border-400 rounded-lg text-text-500 bg-surface-primary cursor-not-allowed select-none">
+    <div v-else
+      class="relative flex px-3 w-full py-2 font-medium text-xs md:text-sm border border-border-400 rounded-lg text-text-500 bg-surface-primary cursor-not-allowed select-none">
       <div class="flex justify-between w-full text-xs md:text-sm">
         <div class="flex items-center gap-1">
           <p>{{ displayLabel }}</p>
           <div
             class="flex items-center bg-information-100 text-information-500 rounded-lg text-xs md:text-sm px-3 py-1 font-semibold"
-            v-if="selected?.desc"
-          >
+            v-if="selected?.desc">
             {{ selected?.desc }}
           </div>
         </div>
       </div>
     </div>
-    <p
-      class="mt-1 font-bold leading-none text-[9px] text-primary-500"
-      v-if="description"
-    >
+    <p class="mt-1 font-bold leading-none text-[9px] text-primary-500" v-if="description">
       {{ description ?? "" }}
     </p>
-    <!-- Teleport ke body: lepas dari containing block ancestor (modal transform / overflow auto di iOS Safari) -->
     <Teleport to="body">
-    <div v-if="show && !disabled" class="w-full">
-      <div
-        class="fixed top-0 left-0 w-screen h-screen bg-transparent z-40"
-        @click="closeModal()"
-        @wheel.passive="closeModal()"
-        @touchmove.passive="closeModal()"
-      ></div>
-      <!-- menu -->
-      <div
-        ref="dropdown_menu"
-        tabindex="0"
-        class="fixed bg-base-white border border-gray-300 rounded-lg z-50 elevation-2 overflow-hidden focus:outline-none"
-        :class="on_top ? '-translate-y-[calc(100%+50px)]' : ''"
-        :style="`width: ${dropdown_container.clientWidth}px; top: ${
-          dropdown_container.getBoundingClientRect().y +
-          dropdown_container.clientHeight
-        }px; left: ${dropdown_container.getBoundingClientRect().x}px`"
-        @keydown="handleMenuKeydown"
-      >
-        <div
-          class="flex flex-col gap-1 p-2 w-full max-h-[300px] overflow-hidden"
-        >
-          <div v-if="with_search">
-            <input
-              ref="search_input"
-              name="search"
-              class="w-full p-3 border text-xs md:text-sm border-primary-100 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary-500 focus:border-transparent"
-              type="text"
-              placeholder="Pencarian ..."
-              v-model="search_value"
-              @keydown="handleSearchKeydown"
-              @input="handleSearchInput"
-              @focus="handleSearchFocus"
-              :label="null"
-            />
-          </div>
-          <div ref="options_container" class="grid overflow-auto gap-0">
-            <template v-if="filteredOptions.length > 0">
-              <template
-                v-for="(opt, index) in filteredOptions"
-                :key="opt.value"
-              >
-                <p
-                  v-if="typeof opt == 'string'"
-                  class="text-start text-xs md:text-sm p-3 text-text-500 font-bold"
-                >
-                  {{ opt }}
-                </p>
-                <button
-                  type="button"
-                  @click="selectOption(opt)"
-                  v-else
-                  ref="option_buttons"
-                  tabindex="-1"
-                  :data-index="index"
-                  class="flex rounded items-center gap-1 text-start text-xs md:text-sm py-2 px-4"
-                  :class="[
-                    modelValue == opt.value
-                      ? 'bg-primary-500 text-base-white'
-                      : 'hover:bg-base-section',
-                    highlightedIndex === index ? 'bg-primary-50' : '',
-                  ]"
-                >
-                  {{ opt.label }}
-                  <div
-                    class="flex items-center bg-information-100 text-information-500 rounded-lg text-[10px] px-3 py-1 font-semibold"
-                    v-if="opt?.desc"
-                  >
-                    {{ opt?.desc }}
-                  </div>
-                </button>
+      <div v-if="show && !disabled" class="w-full">
+        <div class="fixed top-0 left-0 w-screen h-screen bg-transparent z-40" @click="closeModal()"
+          @wheel.passive="closeModal()" @touchmove.passive="closeModal()"></div>
+        <div ref="dropdown_menu" tabindex="0"
+          class="fixed bg-base-white border border-gray-300 rounded-lg z-50 elevation-2 overflow-hidden focus:outline-none"
+          :class="on_top ? '-translate-y-[calc(100%+50px)]' : ''" :style="`width: ${dropdown_container.clientWidth}px; top: ${dropdown_container.getBoundingClientRect().y +
+            dropdown_container.clientHeight
+            }px; left: ${dropdown_container.getBoundingClientRect().x}px`" @keydown="handleMenuKeydown">
+          <div class="flex flex-col gap-1 p-2 w-full max-h-[300px] overflow-hidden">
+            <div v-if="with_search">
+              <input ref="search_input" name="search"
+                class="w-full p-3 border text-xs md:text-sm border-primary-100 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary-500 focus:border-transparent"
+                type="text" placeholder="Pencarian ..." v-model="search_value" @keydown="handleSearchKeydown"
+                @input="handleSearchInput" @focus="handleSearchFocus" :label="null" />
+            </div>
+            <div ref="options_container" class="grid overflow-auto gap-0">
+              <template v-if="filteredOptions.length > 0">
+                <template v-for="(opt, index) in filteredOptions" :key="opt.value">
+                  <p v-if="typeof opt == 'string'" class="text-start text-xs md:text-sm p-3 text-text-500 font-bold">
+                    {{ opt }}
+                  </p>
+                  <button type="button" @click="selectOption(opt)" v-else ref="option_buttons" tabindex="-1"
+                    :data-index="index" class="flex rounded items-center gap-1 text-start text-xs md:text-sm py-2 px-4"
+                    :class="[
+                      modelValue == opt.value
+                        ? 'bg-primary-500 text-base-white'
+                        : 'hover:bg-base-section',
+                      highlightedIndex === index ? 'bg-primary-50' : '',
+                    ]">
+                    {{ opt.label }}
+                    <div
+                      class="flex items-center bg-information-100 text-information-500 rounded-lg text-[10px] px-3 py-1 font-semibold"
+                      v-if="opt?.desc">
+                      {{ opt?.desc }}
+                    </div>
+                  </button>
+                </template>
               </template>
-            </template>
-            <p
-              v-else
-              class="flex items-center gap-1 text-start text-[11px] leading-3 p-2 text-text-400"
-            >
-              <IconSearchEmpty class="flex-none" />
-              <span>Pencarian tidak ditemukan</span>
-            </p>
+              <p v-else class="flex items-center gap-1 text-start text-[11px] leading-3 p-2 text-text-400">
+                <IconSearchEmpty class="flex-none" />
+                <span>Pencarian tidak ditemukan</span>
+              </p>
+            </div>
           </div>
         </div>
       </div>
-    </div>
     </Teleport>
   </div>
 </template>
@@ -500,7 +442,7 @@ const computedClass = computed(() => {
   }
 
   if (props.disabled) {
-    className.push("!bg-gray-100 !border-border-100");
+    className.push("!bg-[gray-100] !border-border-100");
   }
 
   return className.join(" ");
@@ -538,15 +480,19 @@ onUnmounted(() => {
 .button-inactive {
   @apply hover:bg-slate-50 text-sm focus:outline-primary-500 bg-surface-primary focus:bg-primary-50;
 }
+
 .button-active {
-  @apply border-primary-500 bg-primary-50 hover:bg-slate-50 text-sm;
+  @apply border-primary-500  hover:bg-slate-50 text-sm;
 }
+
 .button-inactive-filter {
-  @apply bg-filter-primary hover:bg-slate-50 text-sm focus:outline-primary-500 focus:bg-primary-50;
+  @apply  hover:bg-slate-50 text-sm focus:outline-primary-500 focus:bg-primary-50;
 }
+
 .button-active-filter {
   @apply border-primary-500 bg-primary-50 hover:bg-slate-50 text-sm;
 }
+
 .button-error {
   @apply border-red-500 bg-red-50/50 text-sm;
 }

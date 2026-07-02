@@ -11,25 +11,24 @@
     </div>
     <div class="flex items-center gap-3">
       <slot name="left" />
-      <InputDropdown variant="filter" class="min-w-[80px]" v-if="!hide_size" :label="null" name="size" id="size" :options="sizeList.map(size => ({ label: size == 1000000000 ? 'All' : size, value: size }))" @selected="res => updateSize(res)" placeholder="5" v-model="store[filterKey].size"/>
+      <InputDropdown variant="filter" class="min-w-[80px]" v-if="!hide_size" :label="null" name="size" id="size"
+        :options="sizeList.map(size => ({ label: size == 1000000000 ? 'All' : size, value: size }))"
+        @selected="res => updateSize(res)" placeholder="5" v-model="store[filterKey].size" />
       <slot name="center" />
-      <InputDropdownV2 class="min-w-[160px]" with_search v-if="with_division" :label="null" name="division" placeholder="Global" v-model="store[filterKey].division_id"/>
-      <div v-if="searchable" class="relative focus-within:text-primary-500">
-        <input
-          @keyup="res => updateSearch(res)"
-          :value="store[filterKey].search"
-          @keydown.enter.prevent=""
-          class="flex-grow appearance-none w-full lg:w-fit rounded-lg border border-border-300 bg-transparent py-2 text-xs md:text-sm text-base-black px-3 pr-6 focus:outline-primary-500 focus:bg-primary-50 bg-surface-primary"
-          name="table-search"
-          id="table-search"
-          :placeholder="placeholder"
-        />
-        <i
-          class="fi fi-rr-search absolute right-2 top-1/2 -translate-y-1/2 text-sm transition-colors pointer-events-none"
-        ></i>
+      <InputDropdownV2 class="min-w-[160px]" with_search v-if="with_division" :label="null" name="division"
+        placeholder="Global" v-model="store[filterKey].division_id" />
+      <div v-if="searchable"
+        class="flex items-center gap-2 rounded-3xl border border-border-300 bg-surface-primary px-3 py-2 focus-within:border-primary-500 focus-within:bg-primary-50">
+        <div class="flex items-center justify-center w-6 h-6 rounded-full bg-base-dark shrink-0">
+          <i class="fi fi-rr-search flex items-center justify-center text-white text-xs leading-none"></i>
+        </div>
+
+        <input @keyup="res => updateSearch(res)" :value="store[filterKey].search" @keydown.enter.prevent=""
+          class="w-full bg-transparent text-xs md:text-sm text-base-black placeholder:text-text-400 focus:outline-none"
+          name="table-search" id="table-search" :placeholder="placeholder" />
       </div>
-      <slot/>
-    </div>  
+      <slot />
+    </div>
   </div>
 </template>
 
@@ -67,13 +66,13 @@ const authStore = useAuthStore()
 const timeout = ref(false)
 
 onMounted(async () => {
-  if(props.with_division) {
+  if (props.with_division) {
     await authStore.fetchAllDivision()
   }
 })
 
 const sizeList = computed(() => {
-  if(props.size_list) {
+  if (props.size_list) {
     return props.size_list
   } else {
     return [5, 10, 15, 20, 50, 100]
@@ -93,7 +92,7 @@ const updateSize = ((res) => {
 })
 
 watch(() => props.store?.[props.filterKey]?.page_index, (newVal) => {
-  if(newVal && newVal.total < newVal.last) {
+  if (newVal && newVal.total < newVal.last) {
     props.store[props.filterKey].page = 1
   }
 }, { deep: true })

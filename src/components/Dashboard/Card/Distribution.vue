@@ -123,17 +123,17 @@ const posisiLabel = (posisi: PosisiNineBox) => {
 
 const badgeClass = (posisi: PosisiNineBox) => {
   const map: Record<PosisiNineBox, string> = {
-    baik: 'bg-emerald-50 text-emerald-600',
-    perhatian: 'bg-amber-50 text-amber-600',
-    prioritas: 'bg-red-500 text-white',
+    baik: 'bg-[#00C7A6] text-base-white',
+    perhatian: 'bg-[#FF9F45] text-base-white',
+    prioritas: 'bg-red-500 text-base-white',
   }
   return map[posisi]
 }
 
 const dotClass = (posisi: PosisiNineBox) => {
   const map: Record<PosisiNineBox, string> = {
-    baik: 'bg-emerald-500',
-    perhatian: 'bg-amber-500',
+    baik: 'bg-white',
+    perhatian: 'bg-white',
     prioritas: 'bg-white',
   }
   return map[posisi]

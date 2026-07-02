@@ -52,7 +52,6 @@
         @wheel.passive="closeModal()"
         @touchmove.passive="closeModal()"
       ></div>
-      <!-- menu -->
       <div
         ref="dropdown_menu"
         class="fixed bg-base-white border border-gray-300 rounded-lg z-50 elevation-2 overflow-hidden"
@@ -82,12 +81,10 @@
           </div>
           <div ref="options_container" class="grid overflow-auto gap-0">
             <template v-if="helperStore.master_data[name]?.length > 0">
-              <!-- nullable -->
               <button type="button" @click="$emit('update:modelValue', ''); closeModal(); $emit('selected', null)" v-if="withAll"
                 class="flex items-center gap-1 text-start font-medium text-xs md:text-sm py-2 px-4 rounded" :class="modelValue == null ? 'bg-primary-50 text-primary-500' : 'hover:bg-base-section'">
                 {{ placeholder }}
               </button>
-              <!-- options -->
               <template v-for="opt, opt_index in helperStore.master_data[name]" :key="opt.value">
                 <p v-if="typeof opt == 'string'" class="text-start text-xs md:text-sm p-3 text-text-500 font-bold">
                   {{ opt }}

@@ -10,9 +10,9 @@
         </div>
 
         <!-- Grid -->
-        <div class="grid grid-row-2 gap-2 flex-1">
+        <div class="grid grid-rows-4 gap-2 flex-1">
             <div v-for="(industry, index) in talentpool" :key="index"
-                class="rounded-3xl border border-gray-100 bg-gray-50 px-4 py-4">
+                class="rounded-3xl border border-gray-100 bg-gray-50 px-4 py-4 flex flex-col justify-center">
                 <p class="text-[12px] text-gray-500">
                     {{ industry.name }}
                 </p>

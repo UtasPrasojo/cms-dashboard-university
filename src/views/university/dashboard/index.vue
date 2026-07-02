@@ -1,9 +1,8 @@
 <template>
-    <div class="relative min-h-screen overflow-hidden bg-[#F0F3FF]">
-
+    <div class="relative min-h-screen overflow-hidden ">
         <div class="absolute inset-0 pointer-events-none">
-            <div class="absolute top-4 left-0 w-[300px] h-[300px] rounded-full bg-primary-500 opacity-30 blur-3xl">
-            </div>
+            <!-- <div class="absolute top-4 left-0 w-[300px] h-[300px] rounded-full bg-primary-500 opacity-30 blur-3xl">
+            </div> -->
 
             <div class="absolute bottom-4 right-0 w-[300px] h-[300px] rounded-full bg-primary-500 opacity-30 blur-3xl">
             </div>
@@ -20,13 +19,12 @@
                 <DashboardCardArchetypePersonality />
             </div>
 
-            <div class="w-1/4 h-full flex flex-col">
+            <div class="w-1/4 pb-4 flex flex-col">
                 <DashboardCardCampusReferal :title="referral.title" :code="referral.code"
                     :description="referral.description" />
                 <DashboardCardFindIndustry title="Industri Paling Aktif Mencari" :industries="industries" />
-                <div class="flex-1 flex flex-col">
-                    <DashboardCardTalentpoolStatistic title="Statistik Talent Pool" :talentpool="talentpool" />
-                </div>
+                <DashboardCardTalentpoolStatistic title="Statistik Talent Pool" :talentpool="talentpool"
+                    class="flex-1" />
             </div>
         </div>
         <div class="relative z-10 w-full flex">
@@ -291,50 +289,50 @@ const careerReadiness = {
 }
 
 const prodiDistribution: ProdiDistribution[] = [
-  {
-    name: 'Teknik Informatika',
-    totalMahasiswa: 1247,
-    cvLengkap: 82,
-    selesaiAsesmen: 78,
-    careerReadiness: 923,
-    alignmentMinat: 74,
-    posisi: 'baik',
-  },
-  {
-    name: 'Psikologi',
-    totalMahasiswa: 743,
-    cvLengkap: 76,
-    selesaiAsesmen: 71,
-    careerReadiness: 498,
-    alignmentMinat: 67,
-    posisi: 'baik',
-  },
-  {
-    name: 'Ilmu Hukum',
-    totalMahasiswa: 892,
-    cvLengkap: 23,
-    selesaiAsesmen: 58,
-    careerReadiness: 518,
-    alignmentMinat: 52,
-    posisi: 'perhatian',
-  },
-  {
-    name: 'Komunikasi',
-    totalMahasiswa: 621,
-    cvLengkap: 79,
-    selesaiAsesmen: 68,
-    careerReadiness: 391,
-    alignmentMinat: 63,
-    posisi: 'perhatian',
-  },
-  {
-    name: 'Akuntansi',
-    totalMahasiswa: 344,
-    cvLengkap: 61,
-    selesaiAsesmen: 49,
-    careerReadiness: 175,
-    alignmentMinat: 44,
-    posisi: 'prioritas',
-  },
+    {
+        name: 'Teknik Informatika',
+        totalMahasiswa: 1247,
+        cvLengkap: 82,
+        selesaiAsesmen: 78,
+        careerReadiness: 923,
+        alignmentMinat: 74,
+        posisi: 'baik',
+    },
+    {
+        name: 'Psikologi',
+        totalMahasiswa: 743,
+        cvLengkap: 76,
+        selesaiAsesmen: 71,
+        careerReadiness: 498,
+        alignmentMinat: 67,
+        posisi: 'baik',
+    },
+    {
+        name: 'Ilmu Hukum',
+        totalMahasiswa: 892,
+        cvLengkap: 23,
+        selesaiAsesmen: 58,
+        careerReadiness: 518,
+        alignmentMinat: 52,
+        posisi: 'perhatian',
+    },
+    {
+        name: 'Komunikasi',
+        totalMahasiswa: 621,
+        cvLengkap: 79,
+        selesaiAsesmen: 68,
+        careerReadiness: 391,
+        alignmentMinat: 63,
+        posisi: 'perhatian',
+    },
+    {
+        name: 'Akuntansi',
+        totalMahasiswa: 344,
+        cvLengkap: 61,
+        selesaiAsesmen: 49,
+        careerReadiness: 175,
+        alignmentMinat: 44,
+        posisi: 'prioritas',
+    },
 ]
 </script>

@@ -84,6 +84,8 @@ declare module 'vue' {
     InputTextarea: typeof import('./src/components/Input/Textarea.vue')['default']
     InputTextEditor: typeof import('./src/components/Input/TextEditor.vue')['default']
     InputTextMask: typeof import('./src/components/Input/TextMask.vue')['default']
+    LayoutNavbar: typeof import('./src/components/Layout/Navbar.vue')['default']
+    LayoutTopbar: typeof import('./src/components/Layout/Topbar.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     TbAction: typeof import('./src/components/Tb/Action/index.vue')['default']

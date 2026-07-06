@@ -5,7 +5,7 @@
 
         <div class="relative z-10 flex flex-col">
             <div class="w-[42px] h-[42px] rounded-full bg-[#6F5CF8] flex items-center justify-center shadow-md">
-                <TicketIcon class="w-[20px] h-[20px] text-white" />
+                <IconDashboardTicket class="w-[20px] h-[20px] text-white" />
             </div>
             <p class="mt-6 text-[12px] text-gray-500 font-medium">
                 {{ title }}

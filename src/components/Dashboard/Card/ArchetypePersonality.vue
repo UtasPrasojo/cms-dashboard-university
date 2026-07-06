@@ -18,7 +18,7 @@
                         <img :src="item.image" :alt="item.title" class="w-10 h-10 rounded-full object-cover">
                         <div>
                             <p class="text-[14px] font-medium text-gray-900">{{ item.title }}</p>
-                            <p class="text-[12px] italic text-gray-400">{{ item.traits }}</p>
+                            <p class="text-[12px] f italic text-gray-400">{{ item.traits }}</p>
                         </div>
                     </div>
 

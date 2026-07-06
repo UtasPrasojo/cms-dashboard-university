@@ -46,13 +46,12 @@ import UserIcon from '@/components/Icon/Dashboard/User.vue'
 import File from '@/components/Icon/Dashboard/File.vue'
 import Book from '@/components/Icon/Dashboard/Book.vue'
 import Search from '@/components/Icon/Dashboard/Search.vue'
+import Sinus from '@/components/Icon/Dashboard/Sinus.vue'
+import Star from '@/components/Icon/Dashboard/Stars.vue'
+import Thropy from '@/components/Icon/Dashboard/Trophy.vue'
+import Like from '@/components/Icon/Dashboard/Like.vue'
+import Warning from '@/components/Icon/Dashboard/Warning.vue'
 
-import {
-    UserCircleIcon,
-    AcademicCapIcon,
-    ClipboardDocumentListIcon,
-    ChartBarIcon,
-} from '@heroicons/vue/24/outline'
 import {
     SparklesIcon,
     StarIcon,
@@ -97,7 +96,7 @@ const cardsTalent: TalentCard[] = [
         value: 147,
         iq: 'IQ tinggi',
         ipk: 'IPK rendah',
-        icon: SparklesIcon,
+        icon: Sinus,
         variant: 'orange',
     },
     {
@@ -105,7 +104,7 @@ const cardsTalent: TalentCard[] = [
         value: 312,
         iq: 'IQ tinggi',
         ipk: 'IPK sedang',
-        icon: StarIcon,
+        icon: Star,
         variant: 'blue',
     },
     {
@@ -113,7 +112,7 @@ const cardsTalent: TalentCard[] = [
         value: 172,
         iq: 'IQ tinggi',
         ipk: 'IPK tinggi',
-        icon: ExclamationTriangleIcon,
+        icon: Thropy,
         variant: 'green',
     },
     {
@@ -135,7 +134,7 @@ const cardsTalent: TalentCard[] = [
         value: 392,
         iq: 'IQ sedang',
         ipk: 'IPK tinggi',
-        icon: TrophyIcon,
+        icon: Like,
         variant: 'purple',
     },
     {
@@ -143,7 +142,7 @@ const cardsTalent: TalentCard[] = [
         value: 213,
         iq: 'IQ rendah',
         ipk: 'IPK rendah',
-        icon: HandThumbUpIcon,
+        icon: Warning,
         variant: 'red',
     },
     {

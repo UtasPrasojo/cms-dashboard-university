@@ -42,6 +42,10 @@
     </div>
 </template>
 <script setup lang="ts">
+import UserIcon from '@/components/Icon/Dashboard/User.vue'
+import File from '@/components/Icon/Dashboard/File.vue'
+import Book from '@/components/Icon/Dashboard/Book.vue'
+import Search from '@/components/Icon/Dashboard/Search.vue'
 
 import {
     UserCircleIcon,
@@ -66,25 +70,25 @@ const cards = [
         title: 'Mahasiswa Terdaftar',
         value: '5.847',
         description: '284 lebih banyak dari bulan lalu',
-        icon: UserCircleIcon,
+        icon: UserIcon,
     },
     {
         title: 'CV Lengkap',
         value: '2.143',
         description: '125 lebih banyak dari bulan lalu',
-        icon: ClipboardDocumentListIcon,
+        icon: File,
     },
     {
         title: 'Selesai Asesmen',
         value: '38',
         description: '5 program baru bulan ini',
-        icon: AcademicCapIcon,
+        icon: Book,
     },
     {
         title: 'Aktif di talent Pool',
         value: '92%',
         description: 'Naik 7% dari bulan lalu',
-        icon: ChartBarIcon,
+        icon: Search,
     },
 ]
 const cardsTalent: TalentCard[] = [

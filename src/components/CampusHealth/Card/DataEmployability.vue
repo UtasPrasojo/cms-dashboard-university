@@ -1,24 +1,24 @@
 <template>
-  <div class="rounded-[28px] bg-base-white border border-[#ECECEC] p-6">
+  <div class="rounded-[28px] bg-base-white border border-[#ECECEC] p-4">
     <!-- Header -->
-    <div class="flex items-center justify-between mb-8">
+    <div class="flex items-center justify-between mb-4">
       <div class="flex items-center gap-4">
         <div
-          class="w-20 h-20 rounded-full bg-[#F5F5F5] flex items-center justify-center"
+          class="w-10 h-10 rounded-full bg-[#F5F5F5] flex items-center justify-center"
         >
           <component
             :is="icon"
-            class="w-10 h-10 text-primary-500"
+            class="w-6 h-6 text-primary-500"
           />
         </div>
 
-        <h2 class="text-[28px] font-medium text-[#252547]">
+        <h2 class="text-[14px] font-medium text-[#252547]">
           {{ title }}
         </h2>
       </div>
 
       <button
-        class="w-8 h-8 rounded-full border-2 border-[#252547] flex items-center justify-center"
+        class="w-6 h-6 rounded-full border-2 border-[#252547] flex items-center justify-center"
       >
         <span class="text-sm font-semibold">i</span>
       </button>
@@ -30,7 +30,7 @@
         v-for="(item, index) in items"
         :key="index"
       >
-        <p class="text-[18px] font-medium text-[#252547] mb-3">
+        <p class="text-[14px] font-medium text-[#252547] mb-3">
           {{ item.label }}
         </p>
 
@@ -38,12 +38,12 @@
           :model-value="String(item.value)"
           @update:model-value="(value) => (item.value = value ?? '')"
           :name="`employability-${index}`"
-          inputClass="!h-20 !rounded-[22px] !border-[#D8D8D8] !px-6 !text-[28px] !text-[#A8A8A8] !bg-transparent"
+          inputClass="!border-[#D8D8D8]"
         />
 
         <p
           v-if="item.suffix"
-          class="mt-2 text-lg font-medium text-[#252547]"
+          class="mt-2 text-[12px] font-medium text-[#252547]"
         >
           {{ item.suffix }}
         </p>

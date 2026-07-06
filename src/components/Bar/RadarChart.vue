@@ -78,7 +78,7 @@
         text-anchor="middle"
         dominant-baseline="middle"
         class="fill-base-black"
-        font-size="14"
+        font-size="12"
       >
         {{ label }}
       </text>

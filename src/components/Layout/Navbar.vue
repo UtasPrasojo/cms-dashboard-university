@@ -47,7 +47,7 @@ const collapsed = ref(false)
 
 const menuItems = [
   { label: 'Dashboard', icon: 'fi fi-rr-apps', to: '/dashboard' },
-  { label: 'Campus Health Index', icon: 'fi fi-rr-chart-histogram', to: '/campus-health-index' },
+  { label: 'Campus Health Index', icon: 'fi fi-rr-chart-histogram', to: '/campus-health' },
   { label: 'Mahasiswa', icon: 'fi fi-rr-graduation-cap', to: '/management-student' },
   { label: 'Informasi', icon: 'fi fi-rr-info', to: '/informasi' },
   { label: 'Pengaturan', icon: 'fi fi-rr-settings', to: '/pengaturan' },

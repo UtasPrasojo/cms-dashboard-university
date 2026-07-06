@@ -1,4 +1,4 @@
-<template>
+CampusHealth<template>
     <div class="relative min-h-screen overflow-hidden ">
 
         <div class="absolute inset-0 pointer-events-none">

@@ -6,7 +6,7 @@
         Profil 5 Dimensi
       </p>
 
-      <InformationCircleIcon class="w-6 h-6 text-[#252547]" />
+      <InformationCircleIcon class="w-4 h-4 text-[#252547]" />
     </div>
 
     <div class="grid grid-cols-2 gap-4 items-center">

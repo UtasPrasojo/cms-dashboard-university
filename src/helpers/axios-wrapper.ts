@@ -7,7 +7,6 @@ import router from "@/router";
 import { useAuthStore } from "@/stores/auth.store";
 import { useHelperStore } from "@/stores/helper.store";
 import { useAlertStore, AlertType } from "@/stores/alert.store";
-import { useAssessmentBootstrapStore } from "@/stores/assessment_bootstrap.store";
 
 axios.defaults.baseURL = import.meta.env.VITE_API_ASSESSMENT_URL;
 axios.defaults.timeout = 30000;
@@ -112,9 +111,7 @@ function request(method: HttpMethod): RequestFn {
 
 function authHeader(): Record<string, string> {
   const auth = useAuthStore();
-  const bootstrap = useAssessmentBootstrapStore();
-
-  const token = bootstrap.token || auth.user?.token;
+  const token = auth.user?.access_token;
 
   if (!token) return {};
 
@@ -128,7 +125,6 @@ function errorHandler(error: unknown): NetworkErrorResponse {
   const alertStore = useAlertStore();
   const helper = useHelperStore();
   const auth = useAuthStore();
-  const bootstrap = useAssessmentBootstrapStore();
 
   helper.deactivate();
 
@@ -150,13 +146,6 @@ function errorHandler(error: unknown): NetworkErrorResponse {
 
   if ([401, 402].includes(status)) {
     console.warn("[Axios] Unauthorized");
-
-    bootstrap.clear();
-
-    if (bootstrap.token) {
-      window.location.href = import.meta.env.VITE_LEGACY_APP_URL;
-      return response;
-    }
 
     auth.logout();
     return response;

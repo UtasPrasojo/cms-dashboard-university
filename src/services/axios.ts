@@ -106,10 +106,10 @@ function request(method: HttpMethod) {
 
 function authHeader(url: string): Record<string, string> {
   const { user } = useAuthStore();
-  const isLoggedIn = !!user?.token;
+  const isLoggedIn = !!user?.access_token;
   const isApiUrl = url.startsWith(import.meta.env.VITE_BASE_URL);
   if (isLoggedIn && isApiUrl) {
-    return { Authorization: `Bearer ${user.token}` };
+    return { Authorization: `Bearer ${user.access_token}` };
   } else {
     return {};
   }

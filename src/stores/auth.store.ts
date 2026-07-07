@@ -5,27 +5,29 @@ import type { Socket } from 'socket.io-client'
 import { io } from 'socket.io-client'
 
 const BASE_URL = import.meta.env.VITE_BASE_URL
-const PARTNERSHIP_URL = import.meta.env.VITE_API_PARTNER_URL
 
 interface LoginForm {
   username: string
   password: string
 }
-type OrganizationType = "personal" | "company" | "user";
+
+interface AdminInfo {
+  id: string
+  email: string
+  name: string
+}
 
 interface UserInfo {
-  username: string
-  token: string
-  organization_type?: OrganizationType
-  webview?: boolean
-  type?: string;
+  account_id: string
+  admin: AdminInfo
+  access_token: string
+  refresh_token: string
 }
+
 interface AuthState {
   user: UserInfo | null
   socket: Socket | null
   returnUrl: string | null
-  organization_type?: string | null;
-
 }
 
 export const useAuthStore = defineStore('user', {
@@ -37,57 +39,44 @@ export const useAuthStore = defineStore('user', {
 
   actions: {
     async login(form: LoginForm) {
-      const res = await axiosWrapper.post(`${BASE_URL}/auth/login`, form)
+      const res = await axiosWrapper.post(`${BASE_URL}/auth/university/login`, {
+        email: form.username,
+        password: form.password,
+      })
+
       if (res.status === 200) {
         this.user = {
-          username: form.username,
-          token: res.data.token,
+          account_id: res.data.account_id,
+          admin: res.data.admin,
+          access_token: res.data.access_token,
+          refresh_token: res.data.refresh_token,
         }
         storageHelper.setItem('user', this.user)
 
         this.initSocket()
       }
+
+      return res
     },
 
-    async loginDev(form: LoginForm) {
-      const res = await axiosWrapper.post(`${PARTNERSHIP_URL}/auth/login`, form)
+    async refreshToken() {
+      if (!this.user?.refresh_token) throw new Error('No refresh token available')
+
+      const res = await axiosWrapper.post(`${BASE_URL}/auth/refresh`, {
+        refresh_token: this.user.refresh_token,
+      })
+
       if (res.status === 200) {
-        const token: string =
-          res.data?.access_token ??
-          res.data?.token ??
-          res.access_token ??
-          res.token ??
-          ''
-
         this.user = {
-          username: form.username,
-          token,
+          account_id: res.data.account_id ?? this.user.account_id,
+          admin: res.data.admin ?? this.user.admin,
+          access_token: res.data.access_token,
+          refresh_token: res.data.refresh_token ?? this.user.refresh_token,
         }
         storageHelper.setItem('user', this.user)
-
-        this.initSocket()
       }
-    },
-    
-    async loginWithToken(token: string) {
-      try {
-        const res = await axiosWrapper.get(`${BASE_URL}/auth/me`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
 
-        this.user = {
-          username: res.data.username,
-          token,
-        }
-
-        storageHelper.setItem('user', this.user)
-        this.initSocket()
-      } catch (err) {
-        this.logout()
-        throw err
-      }
+      return res
     },
 
     initSocket() {
@@ -95,7 +84,7 @@ export const useAuthStore = defineStore('user', {
 
       this.socket = io(import.meta.env.VITE_SOCKET_URL, {
         auth: {
-          token: this.user?.token,
+          token: this.user?.access_token,
         },
       })
     },

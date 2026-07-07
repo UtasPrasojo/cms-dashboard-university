@@ -1,5 +1,6 @@
 import LoginView from '@/views/auth/login/index.vue'
 import HomeView from '@/views/HomeView.vue'
+import BlankLayout from '@/layouts/BlankLayout.vue'
 
 export default [
   {
@@ -16,6 +17,7 @@ export default [
     component: LoginView,
     meta: {
       title: 'Login',
+      layout: BlankLayout,
     },
   },
 

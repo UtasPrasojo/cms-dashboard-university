@@ -40,7 +40,7 @@ import { useAuthStore } from '@/stores/auth.store'
 
 const authStore = useAuthStore()
 
-const displayName = computed(() => authStore.user?.username ?? 'User')
+const displayName = computed(() => authStore.user?.admin?.name ?? 'User')
 
 const initials = computed(() => {
   const parts = displayName.value.trim().split(/\s+/).filter(Boolean)

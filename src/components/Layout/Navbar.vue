@@ -31,13 +31,74 @@
 
     <button type="button" title="Keluar"
       class="flex items-center gap-3 px-4 py-3 mt-4 rounded-3xl text-sm font-semibold text-base-white bg-error-500 hover:bg-error-600 transition-colors"
-      :class="collapsed ? 'justify-center' : ''" @click="handleLogout">
+      :class="collapsed ? 'justify-center' : ''" @click="openLogoutConfirm">
       <IconLogout class="w-4 h-4 shrink-0 text-white" />
       <span v-if="!collapsed" class="truncate">Keluar</span>
     </button>
+
+    <!-- Modal Konfirmasi Logout -->
+    <Teleport to="body">
+      <Transition
+        enter-active-class="transition-opacity duration-200"
+        enter-from-class="opacity-0"
+        enter-to-class="opacity-100"
+        leave-active-class="transition-opacity duration-150"
+        leave-from-class="opacity-100"
+        leave-to-class="opacity-0"
+      >
+        <div
+          v-if="showLogoutConfirm"
+          class="fixed inset-0 z-50 grid place-items-center bg-black/40 px-4"
+          @click.self="closeLogoutConfirm"
+        >
+          <Transition
+            enter-active-class="transition-all duration-200"
+            enter-from-class="opacity-0 scale-95"
+            enter-to-class="opacity-100 scale-100"
+            leave-active-class="transition-all duration-150"
+            leave-from-class="opacity-100 scale-100"
+            leave-to-class="opacity-0 scale-95"
+          >
+            <div
+              v-if="showLogoutConfirm"
+              class="w-full max-w-sm bg-base-white rounded-3xl shadow-xl p-6"
+            >
+              <div class="w-12 h-12 rounded-full bg-error-100 grid place-items-center mb-4">
+                <i class="fi fi-rr-exclamation text-error-500 text-xl leading-none"></i>
+              </div>
+
+              <h3 class="text-lg font-bold text-base-black">
+                Keluar dari akun?
+              </h3>
+              <p class="mt-1 text-sm text-text-400">
+                Kamu akan keluar dari sesi ini dan perlu login kembali untuk mengakses dashboard.
+              </p>
+
+              <div class="flex items-center gap-3 mt-6">
+                <button
+                  type="button"
+                  class="flex-1 px-4 py-2.5 rounded-xl text-sm font-semibold text-text-500 border border-border-300 hover:bg-base-section transition-colors"
+                  @click="closeLogoutConfirm"
+                >
+                  Batal
+                </button>
+                <button
+                  type="button"
+                  class="flex-1 px-4 py-2.5 rounded-xl text-sm font-semibold text-base-white bg-error-500 hover:bg-error-600 transition-colors"
+                  @click="confirmLogout"
+                >
+                  Ya, Keluar
+                </button>
+              </div>
+            </div>
+          </Transition>
+        </div>
+      </Transition>
+    </Teleport>
   </aside>
 </template>
-<script setup>
+
+<script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth.store'
@@ -46,15 +107,22 @@ import Information from '@/components/Icon/Information.vue'
 import Settings from '@/components/Icon/Setting.vue'
 import List from '@/components/Icon/List.vue'
 import Social from '@/components/Icon/SocialNetwork.vue'
-import Logout from '@/components/Icon/Logout.vue'
+import IconLogout from '@/components/Icon/Logout.vue'
+
+interface MenuItem {
+  label: string
+  icon: unknown
+  to: string
+}
 
 const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
 
 const collapsed = ref(false)
+const showLogoutConfirm = ref(false)
 
-const menuItems = [
+const menuItems: MenuItem[] = [
   { label: 'Dashboard', icon: Dashboard, to: '/dashboard' },
   { label: 'Campus Health Index', icon: List, to: '/campus-health' },
   { label: 'Mahasiswa', icon: Social, to: '/management-student' },
@@ -62,10 +130,20 @@ const menuItems = [
   { label: 'Pengaturan', icon: Settings, to: '/pengaturan' },
 ]
 
-const isActive = (to) => route.path === to || route.path.startsWith(`${to}/`)
+const isActive = (to: string): boolean =>
+  route.path === to || route.path.startsWith(`${to}/`)
 
-const handleLogout = () => {
+function openLogoutConfirm(): void {
+  showLogoutConfirm.value = true
+}
+
+function closeLogoutConfirm(): void {
+  showLogoutConfirm.value = false
+}
+
+function confirmLogout(): void {
   authStore.logout()
+  showLogoutConfirm.value = false
   router.push('/auth/login')
 }
 </script>

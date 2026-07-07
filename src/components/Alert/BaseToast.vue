@@ -8,7 +8,7 @@
       <div class="absolute left-0 top-0 w-[80px] h-[80px] rounded-br-[90px]"
         :style="{ backgroundColor: accentColor }" />
 
-      <div class="absolute left-20 bottom-8 w-[18px] h-[18px] rounded-full opacity-90"
+      <div class="absolute left-16 bottom-8 w-[18px] h-[18px] rounded-full opacity-90"
         :style="{ backgroundColor: accentColor }" />
 
       <!-- Icon -->

@@ -12,10 +12,21 @@
                 </button>
             </template>
 
-            <ButtonPrimary type="button"
-                class="px-4 py-2 text-xs md:text-sm font-semibold text-base-white bg-primary-500 rounded-lg hover:bg-primary-600 text-nowrap">
-                Import Excel
-            </ButtonPrimary>
+            <ButtonSelectOption label="Tambah Mahasiswa">
+                <button type="button" class="select-option-item" @click="handleAddStudent">
+                    <span class="select-option-item__icon ">
+                        <i class="fi fi-rr-user-add"></i>
+                    </span>
+                    <span>Tambah Mahasiswa</span>
+                </button>
+
+                <button type="button" class="select-option-item" @click="handleImportStudent">
+                    <span class="select-option-item__icon">
+                        <i class="fi fi-rr-file-import"></i>
+                    </span>
+                    <span>Import Mahasiswa</span>
+                </button>
+            </ButtonSelectOption>
         </TbTitle>
 
         <TbMain :size="managementStore.filter.size" :data="managementStore.students">

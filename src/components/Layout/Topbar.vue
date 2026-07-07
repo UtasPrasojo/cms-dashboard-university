@@ -1,5 +1,5 @@
 <template>
-  <header class="w-full flex items-center gap-3 px-1 py-1">
+  <header class="w-full flex items-center gap-3 px-4 py-3">
     <div class="relative w-full max-w-xs ">
       <i class="fi fi-rr-search absolute left-4 top-1/2 -translate-y-1/2 text-text-300 text-sm leading-none"></i>
       <input

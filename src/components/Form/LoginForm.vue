@@ -6,14 +6,26 @@
             <p class="text-[14px] text-[#6E6E6E]">Masukkan email dan password</p>
         </div>
         <div class="flex flex-col gap-4">
-            <InputText name="email" type="email" :required="true" label="Email" placeholder="Masukan alamat email anda..."
-                v-model="form.email" />
-            <InputPassword name="password" :required="true" label="Password" placeholder="Masukan password anda..."
-                v-model="form.password" />
+            <InputText name="email" type="email" :required="true" label="Email"
+                placeholder="Masukan alamat email" v-model="form.email">
+                <template #icon>
+                    <IconAuthEmail />
+                </template>
+            </InputText>
+            <InputPassword name="password" :required="true" label="Password" placeholder="Masukan password"
+                v-model="form.password">
+                <template #icon>
+                    <IconAuthPassword />
+                </template>
+                <template #toggle-icon>
+                    <IconAuthBlind />
+                </template>
+            </InputPassword>
 
         </div>
         <div class="mt-6">
-            <ButtonPrimary class="w-full" type="submit" :disabled="loading"> {{ loading ? 'Memproses...' : 'Masuk' }} </ButtonPrimary>
+            <ButtonPrimary class="w-full" type="submit" :disabled="loading"> {{ loading ? 'Memproses...' : 'Masuk' }}
+            </ButtonPrimary>
         </div>
     </form>
 </template>
@@ -60,7 +72,7 @@ async function onSubmit() {
     loading.value = true
 
     try {
-        await authStore.login({ username: form.email, password: form.password })
+        await authStore.login({ username: form.email, password: form.password }, { toast: true })
         if (authStore.user) {
             router.push(authStore.returnUrl ?? '/dashboard')
         }

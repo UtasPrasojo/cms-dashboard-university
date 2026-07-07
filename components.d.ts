@@ -12,6 +12,7 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     Alert: typeof import('./src/components/Alert/index.vue')['default']
+    AlertBaseToast: typeof import('./src/components/Alert/BaseToast.vue')['default']
     BarPilBar: typeof import('./src/components/Bar/PilBar.vue')['default']
     BarProgressBar: typeof import('./src/components/Bar/ProgressBar.vue')['default']
     BarRadarChart: typeof import('./src/components/Bar/RadarChart.vue')['default']

@@ -38,6 +38,10 @@ export interface GetFacultyParams {
   orderBy?: string
 }
 
+export interface CreateFacultyPayload {
+  name: string
+}
+
 export interface FacultyState {
   faculties: Item[]
   filter: FacultyFilter

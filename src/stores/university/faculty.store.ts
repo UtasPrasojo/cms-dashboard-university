@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { axiosWrapper } from "@/helpers/axios-wrapper";
 import type {
+    CreateFacultyPayload,
     FacultyState,
     GetFacultyParams,
     Root,
@@ -68,6 +69,29 @@ export const useFacultystore = defineStore("faculty", {
             } catch (error) {
                 console.error("Failed to fetch faculties:", error);
                 this.error = "Terjadi kesalahan saat mengambil data faculty";
+            } finally {
+                this.loading = false;
+            }
+        },
+
+        async createFaculty(payload: CreateFacultyPayload): Promise<boolean> {
+            this.loading = true;
+            this.error = null;
+
+            try {
+                const url = `${baseUrl}/admin-university/master/faculties`;
+                const res: Root = await axiosWrapper.post(url, payload);
+
+                if ((res as unknown as { status: number }).status?.toString()[0] !== "2") {
+                    this.error = res.message || "Gagal menambahkan faculty";
+                    return false;
+                }
+
+                return true;
+            } catch (error) {
+                console.error("Failed to create faculty:", error);
+                this.error = "Terjadi kesalahan saat menambahkan faculty";
+                return false;
             } finally {
                 this.loading = false;
             }

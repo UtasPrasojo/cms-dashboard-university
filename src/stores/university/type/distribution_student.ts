@@ -1,30 +1,37 @@
-export interface DistributionStudentResponse {
-  data: DistributionStudent
-  message: string
-  error: any
-}
+import { z } from "@/utils/validate";
 
-export interface DistributionStudent {
-  pagination: Pagination
-  items: Item[]
-}
+export const paginationSchema = z.object({
+  page: z.number(),
+  size: z.number(),
+  total: z.number(),
+});
 
-export interface Pagination {
-  page: number
-  size: number
-  total: number
-}
+export const distributionStudentItemSchema = z.object({
+  major: z.string(),
+  faculty: z.string(),
+  total_student: z.number(),
+  cv_summary: z.number(),
+  assessment_summary: z.number(),
+  career_readiness_summary: z.number(),
+  alignment_interest_summary: z.number(),
+  nine_box_summary: z.array(z.number()),
+});
 
-export interface Item {
-  major: string
-  faculty: string
-  total_student: number
-  cv_summary: number
-  assessment_summary: number
-  career_readiness_summary: number
-  alignment_interest_summary: number
-  nine_box_summary: number[]
-}
+export const distributionStudentSchema = z.object({
+  pagination: paginationSchema,
+  items: z.array(distributionStudentItemSchema),
+});
+
+export const distributionStudentResponseSchema = z.object({
+  data: distributionStudentSchema,
+  message: z.string(),
+  error: z.unknown(),
+});
+
+export type Pagination = z.infer<typeof paginationSchema>;
+export type Item = z.infer<typeof distributionStudentItemSchema>;
+export type DistributionStudent = z.infer<typeof distributionStudentSchema>;
+export type DistributionStudentResponse = z.infer<typeof distributionStudentResponseSchema>;
 
 export type PosisiNineBox =
   | 'prioritas intervensi'

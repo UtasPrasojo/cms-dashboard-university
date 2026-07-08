@@ -55,6 +55,7 @@ import Star from '@/components/Icon/Dashboard/Stars.vue'
 import Thropy from '@/components/Icon/Dashboard/Trophy.vue'
 import Like from '@/components/Icon/Dashboard/Like.vue'
 import Warning from '@/components/Icon/Dashboard/Warning.vue'
+import Idea from '@/components/Icon/Dashboard/Idea.vue'
 
 
 import type { TalentCard } from '@/components/Dashboard/Card/TalentMatrix.vue'
@@ -239,7 +240,7 @@ const talentpool = [
 
 const cognitiveSummary = {
     averageIQ: 112,
-    icon: CpuChipIcon,
+    icon: Idea,
 }
 
 const highlightAspects = [

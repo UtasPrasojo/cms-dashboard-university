@@ -1,5 +1,5 @@
 <template>
-  <div class="h-screen w-full flex gap-2 p-[0.5] overflow-hidden bg-[#F0F3FF]">
+  <div class="h-screen w-full flex  p-[0.5] overflow-hidden bg-[#F0F3FF]">
     <LayoutNavbar />
 
     <main

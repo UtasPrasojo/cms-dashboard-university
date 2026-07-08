@@ -94,7 +94,7 @@ const getPosisiNineBox = (
 
 
 
-const cards = [
+const dummyCards = [
     {
         title: 'Mahasiswa Terdaftar',
         value: '5.847',
@@ -103,13 +103,13 @@ const cards = [
     },
     {
         title: 'CV Lengkap',
-        value: '2.143',
+        value: '21%',
         description: '125 lebih banyak dari bulan lalu',
         icon: File,
     },
     {
         title: 'Selesai Asesmen',
-        value: '38',
+        value: '38%',
         description: '5 program baru bulan ini',
         icon: Book,
     },
@@ -120,6 +120,54 @@ const cards = [
         icon: Search,
     },
 ]
+
+const cards = computed(() => {
+    const students = dashboardStore.percentageStats?.students
+
+    if (!students) {
+        return dummyCards
+    }
+
+    const totalRegistration = Number(students.total_registration)
+
+    const registrationDiff =
+        Number(students.current_month_registration) - Number(students.previous_month_registration)
+    const registrationDiffLabel = registrationDiff >= 0 ? 'lebih banyak' : 'lebih sedikit'
+
+    const toPercentage = (value: string) => {
+        if (!totalRegistration) {
+            return '0%'
+        }
+        return `${Math.round((Number(value) / totalRegistration) * 100)}%`
+    }
+
+    return [
+        {
+            title: 'Mahasiswa Terdaftar',
+            value: students.total_registration,
+            description: `${Math.abs(registrationDiff)} ${registrationDiffLabel} dari bulan lalu`,
+            icon: UserIcon,
+        },
+        {
+            title: 'CV Lengkap',
+            value: toPercentage(students.total_cv_completed),
+            description: `${students.total_cv_completed} dari ${students.total_registration} mahasiswa`,
+            icon: File,
+        },
+        {
+            title: 'Selesai Asesmen',
+            value: toPercentage(students.total_completed_assessment),
+            description: `${students.total_completed_assessment} dari ${students.total_registration} mahasiswa`,
+            icon: Book,
+        },
+        {
+            title: 'Aktif di talent Pool',
+            value: toPercentage(students.total_active_talent_pool),
+            description: `${students.total_active_talent_pool} dari ${students.total_registration} mahasiswa`,
+            icon: Search,
+        },
+    ]
+})
 const cardsTalent: TalentCard[] = [
     {
         title: 'Potensi tersembunyi',
@@ -392,5 +440,6 @@ const prodiDistribution = computed<ProdiDistribution[]>(() => {
 onMounted(() => {
     dashboardStore.getReferralCode()
     dashboardStore.getDistributionStudent()
+    dashboardStore.getPercentageStats()
 })
 </script>

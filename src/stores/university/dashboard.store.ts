@@ -3,6 +3,7 @@ import { axiosWrapper } from "@/helpers/axios-wrapper";
 import { validate } from "@/utils/validate";
 import { referralCodeResponseSchema, type ReferralCode } from "@/stores/university/type/referral_code";
 import { distributionStudentResponseSchema, type DistributionStudent } from "@/stores/university/type/distribution_student"
+import { percentageStatsResponseSchema, type PercentageStats } from "@/stores/university/type/percentage_stats"
 
 const baseUrl = import.meta.env.VITE_BASE_URL as string;
 
@@ -10,10 +11,26 @@ export const useDashboardStore = defineStore("dashboard", {
     state: () => ({
         referralCode: null as ReferralCode | null,
         distributionStudent: null as DistributionStudent | null,
+        percentageStats: null as PercentageStats | null,
         error: null as string | null,
     }),
 
     actions: {
+
+        async getPercentageStats() {
+            const res = await axiosWrapper.get(
+                `${baseUrl}/admin-university/dashboard/percentage`
+            );
+
+            const result = validate(percentageStatsResponseSchema, res);
+            if (!result.success) {
+                console.error("Invalid percentage stats response:", result.errors);
+                this.error = "Format data persentase tidak valid";
+                return;
+            }
+
+            this.percentageStats = result.data.data;
+        },
         async getReferralCode() {
             const res = await axiosWrapper.get(
                 `${baseUrl}/admin-university/dashboard/referral`

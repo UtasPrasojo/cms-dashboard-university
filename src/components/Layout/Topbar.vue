@@ -47,13 +47,13 @@
           <button
             v-else
             v-for="item in facultyStore.faculties"
-            :key="item.faculty"
+            :key="item.id"
             type="button"
             class="w-full text-left px-4 py-2 text-xs md:text-sm hover:bg-base-section"
-            :class="selectedFaculty === item.faculty ? 'text-primary-500 font-semibold' : 'text-text-500'"
-            @click="selectFaculty(item.faculty)"
+            :class="selectedFaculty === item.id ? 'text-primary-500 font-semibold' : 'text-text-500'"
+            @click="selectFaculty(item.id)"
           >
-            {{ item.faculty }}
+            {{ item.name }}
           </button>
         </div>
       </div>
@@ -90,7 +90,7 @@ import { useAuthStore } from '@/stores/auth.store'
 import { useFacultystore } from '@/stores/university/faculty.store'
 
 const emit = defineEmits<{
-  'update:faculty': [faculty: string | null]
+  'update:faculty': [facultyId: string | null]
 }>()
 
 const authStore = useAuthStore()
@@ -110,16 +110,19 @@ const isOpen = ref(false)
 const selectedFaculty = ref<string | null>(null)
 const dropdownRef = ref<HTMLElement | null>(null)
 
-const selectedFacultyLabel = computed(() => selectedFaculty.value ?? 'Semua Fakultas')
+const selectedFacultyLabel = computed(() => {
+  if (!selectedFaculty.value) return 'Semua Fakultas'
+  return facultyStore.faculties.find((item) => item.id === selectedFaculty.value)?.name ?? 'Semua Fakultas'
+})
 
 function toggleDropdown() {
   isOpen.value = !isOpen.value
 }
 
-function selectFaculty(faculty: string | null) {
-  selectedFaculty.value = faculty
+function selectFaculty(facultyId: string | null) {
+  selectedFaculty.value = facultyId
   isOpen.value = false
-  emit('update:faculty', faculty)
+  emit('update:faculty', facultyId)
 }
 
 function handleClickOutside(event: MouseEvent) {

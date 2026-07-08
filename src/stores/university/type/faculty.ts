@@ -16,7 +16,9 @@ export interface Pagination {
 }
 
 export interface Item {
-  faculty: string
+  id: string
+  name: string
+  major_count: number
 }
 
 export interface FacultyFilter {

@@ -51,8 +51,8 @@ export const useFacultystore = defineStore("faculty", {
 
                 const queryString = new URLSearchParams(query).toString();
                 const url = queryString
-                    ? `${baseUrl}/admin-university/student/faculty?${queryString}`
-                    : `${baseUrl}/admin-university/student/faculty`;
+                    ? `${baseUrl}/admin-university/master/faculties?${queryString}`
+                    : `${baseUrl}/admin-university/master/faculties`;
 
                 const res: Root = await axiosWrapper.get(url);
 

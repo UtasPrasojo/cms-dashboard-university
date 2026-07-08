@@ -20,7 +20,7 @@
             </div>
 
             <div class="w-1/4 pb-4 flex flex-col">
-                <DashboardCardCampusReferal :title="referral.title" :code="referral.code"
+                <DashboardCardCampusReferal :title="referral.title" :code="dashboardStore.referralCode?.code ?? ''"
                     :description="referral.description" />
                 <DashboardCardFindIndustry title="Industri Paling Aktif Mencari" :industries="industries" />
                 <DashboardCardTalentpoolStatistic title="Statistik Talent Pool" :talentpool="talentpool"
@@ -42,6 +42,10 @@
     </div>
 </template>
 <script setup lang="ts">
+import { onMounted, computed } from 'vue'
+import { useDashboardStore } from '@/stores/university/dashboard.store'
+
+
 import UserIcon from '@/components/Icon/Dashboard/User.vue'
 import File from '@/components/Icon/Dashboard/File.vue'
 import Book from '@/components/Icon/Dashboard/Book.vue'
@@ -52,16 +56,41 @@ import Thropy from '@/components/Icon/Dashboard/Trophy.vue'
 import Like from '@/components/Icon/Dashboard/Like.vue'
 import Warning from '@/components/Icon/Dashboard/Warning.vue'
 
-import {
-    SparklesIcon,
-    StarIcon,
-    TrophyIcon,
-    HandThumbUpIcon,
-    ExclamationTriangleIcon,
-} from '@heroicons/vue/24/solid'
+
 import type { TalentCard } from '@/components/Dashboard/Card/TalentMatrix.vue'
 import { CpuChipIcon } from '@heroicons/vue/24/outline'
 import type { ProdiDistribution } from '@/components/Dashboard/Card/Distribution.vue'
+import type { PosisiNineBox } from '@/stores/university/type/distribution_student'
+
+
+const dashboardStore = useDashboardStore()
+
+const getPosisiNineBox = (
+    nineBoxSummary: number[]
+): PosisiNineBox => {
+    if (nineBoxSummary.length < 2) {
+        return 'profil solid'
+    }
+
+    const key = `${nineBoxSummary[0]},${nineBoxSummary[1]}`
+
+    const map: Record<string, PosisiNineBox> = {
+        '0,0': 'prioritas intervensi',
+        '0,1': 'perlu pendampingan',
+        '0,2': 'bakat terpendam',
+
+        '1,0': 'perlu dorongan',
+        '1,1': 'profil solid',
+        '1,2': 'bintang berkembang',
+
+        '2,0': 'tekun & konsisten',
+        '2,1': 'pekerja keras berprestasi',
+        '2,2': 'talent unggulan',
+    }
+
+    return map[key] ?? 'profil solid'
+}
+
 
 
 const cards = [
@@ -161,12 +190,13 @@ const cardsTalent: TalentCard[] = [
     },
 ]
 
+
 const referral = {
     title: 'Kode referral kampus',
-    code: 'UDGH8738',
     description:
         'Kode referral kampus digunakan oleh mahasiswa untuk terhubung atau terafiliasi dengan kampus.',
 }
+
 
 const industries = [
     {
@@ -291,7 +321,7 @@ const careerReadiness = {
     },
 }
 
-const prodiDistribution: ProdiDistribution[] = [
+const dummyProdiDistribution: ProdiDistribution[] = [
     {
         name: 'Teknik Informatika',
         totalMahasiswa: 1247,
@@ -299,7 +329,7 @@ const prodiDistribution: ProdiDistribution[] = [
         selesaiAsesmen: 78,
         careerReadiness: 923,
         alignmentMinat: 74,
-        posisi: 'baik',
+        posisi: 'talent unggulan',
     },
     {
         name: 'Psikologi',
@@ -308,7 +338,7 @@ const prodiDistribution: ProdiDistribution[] = [
         selesaiAsesmen: 71,
         careerReadiness: 498,
         alignmentMinat: 67,
-        posisi: 'baik',
+        posisi: 'bintang berkembang',
     },
     {
         name: 'Ilmu Hukum',
@@ -317,7 +347,7 @@ const prodiDistribution: ProdiDistribution[] = [
         selesaiAsesmen: 58,
         careerReadiness: 518,
         alignmentMinat: 52,
-        posisi: 'perhatian',
+        posisi: 'profil solid',
     },
     {
         name: 'Komunikasi',
@@ -326,7 +356,7 @@ const prodiDistribution: ProdiDistribution[] = [
         selesaiAsesmen: 68,
         careerReadiness: 391,
         alignmentMinat: 63,
-        posisi: 'perhatian',
+        posisi: 'bakat terpendam',
     },
     {
         name: 'Akuntansi',
@@ -335,7 +365,31 @@ const prodiDistribution: ProdiDistribution[] = [
         selesaiAsesmen: 49,
         careerReadiness: 175,
         alignmentMinat: 44,
-        posisi: 'prioritas',
+        posisi: 'prioritas intervensi',
     },
 ]
+
+
+const prodiDistribution = computed<ProdiDistribution[]>(() => {
+    const distribution = dashboardStore.distributionStudent;
+
+    if (!distribution) {
+        return dummyProdiDistribution;
+    }
+
+    return distribution.items.map((item) => ({
+        name: item.major,
+        totalMahasiswa: item.total_student,
+        cvLengkap: item.cv_summary,
+        selesaiAsesmen: item.assessment_summary,
+        careerReadiness: item.career_readiness_summary,
+        alignmentMinat: item.alignment_interest_summary,
+        posisi: getPosisiNineBox(item.nine_box_summary)
+    }));
+});
+
+onMounted(() => {
+    dashboardStore.getReferralCode()
+    dashboardStore.getDistributionStudent()
+})
 </script>

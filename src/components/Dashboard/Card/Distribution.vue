@@ -12,18 +12,15 @@
             <th class="text-left font-medium text-[#303030] px-6 py-4 whitespace-nowrap">Program Studi</th>
             <th class="text-left font-medium text-[#303030] px-6 py-4 whitespace-nowrap">Mahasiswa</th>
             <th class="text-left font-medium text-[#303030] px-6 py-4 whitespace-nowrap min-w-[220px]">CV Lengkap</th>
-            <th class="text-left font-medium text-[#303030] px-6 py-4 whitespace-nowrap min-w-[220px]">Selesai Asesmen</th>
+            <th class="text-left font-medium text-[#303030] px-6 py-4 whitespace-nowrap min-w-[220px]">Selesai Asesmen
+            </th>
             <th class="text-left font-medium text-[#303030] px-6 py-4 whitespace-nowrap">Career Readiness</th>
             <th class="text-left font-medium text-[#303030] px-6 py-4 whitespace-nowrap">Alignment Minat</th>
             <th class="text-left font-medium text-[#303030] px-6 py-4 whitespace-nowrap">Posisi 9-Box</th>
           </tr>
         </thead>
         <tbody>
-          <tr
-            v-for="(prodi, index) in data"
-            :key="index"
-            class="border-b border-gray-50 last:border-none"
-          >
+          <tr v-for="(prodi, index) in data" :key="index" class="border-b border-gray-50 last:border-none">
             <td class="px-6 py-4 text-gray-800 font-medium whitespace-nowrap">
               {{ prodi.name }}
             </td>
@@ -33,11 +30,7 @@
 
             <td class="px-6 py-4">
               <div class="flex items-center gap-3">
-                <BarProgressBar
-                  :value="prodi.cvLengkap"
-                  :color="getColor(prodi.cvLengkap)"
-                  class="flex-1"
-                />
+                <BarProgressBar :value="prodi.cvLengkap" :color="getColor(prodi.cvLengkap)" class="flex-1" />
                 <span class="text-gray-800 font-semibold w-10 text-right">
                   {{ prodi.cvLengkap }}%
                 </span>
@@ -46,11 +39,7 @@
 
             <td class="px-6 py-4">
               <div class="flex items-center gap-3">
-                <BarProgressBar
-                  :value="prodi.selesaiAsesmen"
-                  :color="getColor(prodi.selesaiAsesmen)"
-                  class="flex-1"
-                />
+                <BarProgressBar :value="prodi.selesaiAsesmen" :color="getColor(prodi.selesaiAsesmen)" class="flex-1" />
                 <span class="text-gray-800 font-semibold w-10 text-right">
                   {{ prodi.selesaiAsesmen }}%
                 </span>
@@ -65,10 +54,8 @@
             </td>
 
             <td class="px-6 py-4 whitespace-nowrap">
-              <span
-                class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium"
-                :class="badgeClass(prodi.posisi)"
-              >
+              <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium"
+                :class="badgeClass(prodi.posisi)">
                 <span class="w-1.5 h-1.5 rounded-full" :class="dotClass(prodi.posisi)"></span>
                 {{ posisiLabel(prodi.posisi) }}
               </span>
@@ -82,8 +69,9 @@
 
 <script setup lang="ts">
 import { InformationCircleIcon } from '@heroicons/vue/24/outline'
+import type { PosisiNineBox } from '@/stores/university/type/distribution_student'
 
-export type PosisiNineBox = 'baik' | 'perhatian' | 'prioritas'
+
 
 export interface ProdiDistribution {
   name: string
@@ -112,30 +100,43 @@ const getColor = (value: number): 'success' | 'warning' | 'danger' => {
   return 'success'
 }
 
-const posisiLabel = (posisi: PosisiNineBox) => {
-  const map: Record<PosisiNineBox, string> = {
-    baik: 'Baik',
-    perhatian: 'Perhatian',
-    prioritas: 'Prioritas intervensi',
-  }
-  return map[posisi]
-}
+const posisiLabel = (posisi: PosisiNineBox) =>
+  posisi.charAt(0).toUpperCase() + posisi.slice(1)
 
 const badgeClass = (posisi: PosisiNineBox) => {
   const map: Record<PosisiNineBox, string> = {
-    baik: 'bg-[#00C7A6] text-base-white',
-    perhatian: 'bg-[#FF9F45] text-base-white',
-    prioritas: 'bg-red-500 text-base-white',
+    'prioritas intervensi': 'bg-[#FC8078] text-white',
+
+    'bakat terpendam': 'bg-[#FFB26A] text-white',
+
+    'bintang berkembang': 'bg-[#335ACC] text-white',
+
+    'pekerja keras berprestasi': 'bg-[#705DEF] text-white',
+
+    'talent unggulan': 'bg-[#009E84] text-white',
+
+    'perlu pendampingan': 'bg-[#F9FBFE] text-black',
+
+    'perlu dorongan': 'bg-[#F9FBFE] text-black',
+
+    'profil solid': 'bg-[#F9FBFE] text-black',
+
+    'tekun & konsisten': 'bg-[#F9FBFE] text-black',
   }
+
   return map[posisi]
 }
 
 const dotClass = (posisi: PosisiNineBox) => {
-  const map: Record<PosisiNineBox, string> = {
-    baik: 'bg-white',
-    perhatian: 'bg-white',
-    prioritas: 'bg-white',
-  }
-  return map[posisi]
+  const lightBadge = [
+    'perlu pendampingan',
+    'perlu dorongan',
+    'profil solid',
+    'tekun & konsisten',
+  ]
+
+  return lightBadge.includes(posisi)
+    ? 'bg-black'
+    : 'bg-white'
 }
 </script>

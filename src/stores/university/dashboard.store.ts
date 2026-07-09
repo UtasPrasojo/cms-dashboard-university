@@ -4,6 +4,7 @@ import { validate } from "@/utils/validate";
 import { referralCodeResponseSchema, type ReferralCode } from "@/stores/university/type/referral_code";
 import { distributionStudentResponseSchema, type DistributionStudent } from "@/stores/university/type/distribution_student"
 import { percentageStatsResponseSchema, type PercentageStats } from "@/stores/university/type/percentage_stats"
+import {cognitiveProfileResponseSchema, type CognitiveProfile} from "@/stores/university/type/cognitive_profile"
 
 const baseUrl = import.meta.env.VITE_BASE_URL as string;
 
@@ -12,6 +13,7 @@ export const useDashboardStore = defineStore("dashboard", {
         referralCode: null as ReferralCode | null,
         distributionStudent: null as DistributionStudent | null,
         percentageStats: null as PercentageStats | null,
+        cognitiveProfile: null as CognitiveProfile | null,
         error: null as string | null,
     }),
 
@@ -59,5 +61,18 @@ export const useDashboardStore = defineStore("dashboard", {
 
             this.distributionStudent = result.data.data;
         },
+        async getCognitiveProfile() {
+            const res = await axiosWrapper.get(
+                `${baseUrl}/admin-university/dashboard/cognitive-summary`
+            );
+            const result = validate(cognitiveProfileResponseSchema, res);
+            if (!result.success) {
+                console.error("Invalid cognitive profile response:", result.errors);
+                this.error = "Format data profile kognitif tidak valid";
+                return;
+            }
+            this.cognitiveProfile = result.data.data
+
+        }
     },
 });

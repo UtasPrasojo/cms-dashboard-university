@@ -53,7 +53,7 @@
             class="flex items-center gap-3"
           >
             <div
-              class="w-12 h-12 rounded-full bg-violet-100 flex items-center justify-center text-primary-500 font-semibold text-[12px]"
+              class="w-[26px] h-[26px] rounded-full bg-violet-100 flex items-center justify-center text-primary-500 font-semibold text-[12px]"
             >
               {{ item.rank }}
             </div>

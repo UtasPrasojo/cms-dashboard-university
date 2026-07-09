@@ -1,50 +1,38 @@
 <template>
-  <div class="border rounded-3xl py-8 text-center">
-    <img
-      :class="['mx-auto h-[150px]', imgClass]"
-      :src="imgSrc"
-      alt="">
-    <p :class="['font-bold text-lg', titleClass]"> {{ title }} </p>
-    <p class="container-desc"> {{ desc }} </p>
+  <div class="flex flex-col items-center justify-center py-8 text-center">
+    <div class="flex h-20 w-20 items-center justify-center rounded-full bg-gray-100">
+      <component :is="IconComponent" :class="['h-9 w-9', imgClass]" />
+    </div>
+
+    <p :class="['mt-4 text-lg font-bold text-gray-900', titleClass]">
+      {{ title }}
+    </p>
+    <p class="container-desc mt-1 text-sm text-gray-400">
+      {{ desc }}
+    </p>
+
+    <slot />
   </div>
 </template>
 
-<script>
-import EmptyTable from '@/assets/illustration-empty.svg';
-import EmptyCard from '@/assets/illustration-no-data-cuate.svg';
+<script setup lang="ts">
+import IconEmptyState from '@/components/Icon/EmptyState.vue'
 
-export default {
-  props: {
-    title: {
-      type: [String, Number],
-      default: ''
-    },
-    desc: {
-      type: [String, Number],
-      default: ''
-    },
-    imgClass: {
-      type: String,
-      default: ''
-    },
-    titleClass: {
-      type: String,
-      default: ''
-    },
-    variant: {
-      type: String,
-      default: 'table',
-      validator: (v) => ['table', 'card'].includes(v)
-    },
-  },
-  computed: {
-    imgSrc() {
-      const variants = {
-        table: EmptyTable,
-        card: EmptyCard,
-      }
-      return variants[this.variant] || EmptyTable
-    }
-  }
+interface Props {
+  title?: string | number
+  desc?: string | number
+  imgClass?: string
+  titleClass?: string
+  variant?: 'table' | 'card'
 }
+
+withDefaults(defineProps<Props>(), {
+  title: '',
+  desc: '',
+  imgClass: '',
+  titleClass: '',
+  variant: 'table',
+})
+
+const IconComponent = IconEmptyState
 </script>

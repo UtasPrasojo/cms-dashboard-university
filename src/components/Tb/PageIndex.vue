@@ -75,12 +75,9 @@
   </div>
 
   <div class="md:px-12" v-else-if="!helperStore.onFetch && helperStore.page_index.total_page == 0">
-    <StatusEmpty :desc="empty_title">
-      <div class="flex flex-col gap-3 items-center">
-        <p class="text-sm text-text-300 xl:max-w-[100%]"> {{ empty_desc }}</p>
-        <slot name="button" />
-      </div>
-    </StatusEmpty>
+    <PartialEmptyState :title="empty_title" :desc="empty_desc">
+      <slot name="button" />
+    </PartialEmptyState>
   </div>
 </template>
 

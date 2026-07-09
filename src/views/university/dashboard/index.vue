@@ -286,68 +286,76 @@ const talentpool = [
 
 
 
-const cognitiveSummary = {
+const dummyCognitiveSummary = {
     averageIQ: 112,
     icon: Idea,
 }
 
-const highlightAspects = [
-    {
-        rank: 1,
-        title: 'Verbal',
-    },
-    {
-        rank: 2,
-        title: 'Penalaran Abstrak',
-    },
-    {
-        rank: 3,
-        title: 'Spasial',
-    },
+const dummyHighlightAspects = [
+    { rank: 1, title: 'Verbal' },
+    { rank: 2, title: 'Penalaran Abstrak' },
+    { rank: 3, title: 'Spasial' },
 ]
 
-const cognitiveBars = [
-    {
-        label: 'Verbal',
-        value: 115,
-        active: true,
-    },
-    {
-        label: 'P. Logis',
-        value: 80,
-        active: false,
-    },
-    {
-        label: 'P. Abstrak',
-        value: 118,
-        active: true,
-    },
-    {
-        label: 'Berpikir\nKritis',
-        value: 104,
-        active: false,
-    },
-    {
-        label: 'Penguasaan\nNumerik',
-        value: 20,
-        active: false,
-    },
-    {
-        label: 'Komputasi',
-        value: 106,
-        active: false,
-    },
-    {
-        label: 'Wacana',
-        value: 101,
-        active: false,
-    },
-    {
-        label: 'Spasial',
-        value: 111,
-        active: true,
-    },
+const dummyCognitiveBars = [
+    { label: 'Verbal', value: 115, active: true },
+    { label: 'P. Logis', value: 80, active: false },
+    { label: 'P. Abstrak', value: 118, active: true },
+    { label: 'Berpikir\nKritis', value: 104, active: false },
+    { label: 'Penguasaan\nNumerik', value: 20, active: false },
+    { label: 'Komputasi', value: 106, active: false },
+    { label: 'Wacana', value: 101, active: false },
+    { label: 'Spasial', value: 111, active: true },
 ]
+
+const sortedCognitiveDetails = computed(() => {
+    const details = dashboardStore.cognitiveProfile?.details ?? []
+    return [...details].sort((a, b) => Number(b.avg_score) - Number(a.avg_score))
+})
+
+const top3CognitiveIds = computed(() => {
+    return new Set(sortedCognitiveDetails.value.slice(0, 3).map((d) => d.ccat_group_id))
+})
+
+const cognitiveSummary = computed(() => {
+    const avgScore = dashboardStore.cognitiveProfile?.avg_score
+
+    if (!avgScore) {
+        return dummyCognitiveSummary
+    }
+
+    return {
+        averageIQ: Math.round(Number(avgScore)),
+        icon: Idea,
+    }
+})
+
+const highlightAspects = computed(() => {
+    const details = dashboardStore.cognitiveProfile?.details
+
+    if (!details || details.length === 0) {
+        return dummyHighlightAspects
+    }
+
+    return sortedCognitiveDetails.value.slice(0, 3).map((detail, index) => ({
+        rank: index + 1,
+        title: detail.name,
+    }))
+})
+
+const cognitiveBars = computed(() => {
+    const details = dashboardStore.cognitiveProfile?.details
+
+    if (!details || details.length === 0) {
+        return dummyCognitiveBars
+    }
+
+    return details.map((detail) => ({
+        label: detail.name,
+        value: Math.round(Number(detail.avg_score)),
+        active: top3CognitiveIds.value.has(detail.ccat_group_id),
+    }))
+})
 
 const careerReadiness = {
     score: 80,
@@ -441,5 +449,6 @@ onMounted(() => {
     dashboardStore.getReferralCode()
     dashboardStore.getDistributionStudent()
     dashboardStore.getPercentageStats()
+    dashboardStore.getCognitiveProfile()
 })
 </script>

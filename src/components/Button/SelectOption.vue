@@ -54,7 +54,7 @@ const label_size = {
 
 const icon_size = {
     small: "px-[5px] py-2.5",
-    medium: "px-[5px] py-3.5",
+    medium: "px-[5px] py-4",
     large: "px-2 py-4",
 };
 
@@ -122,17 +122,16 @@ onBeforeUnmount(() => document.removeEventListener("click", handleClickOutside))
     @apply absolute z-20 mt-2 min-w-[200px] w-fit bg-base-white p-2 shadow-md rounded-xl;
 }
 
-/* Helper untuk item opsi di dalam dropdown: ikon bulat + label sejajar */
-.select-option-item {
-    @apply w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-base-black hover:bg-base-section transition-colors cursor-pointer whitespace-nowrap;
+.select-option__dropdown :deep(.select-option-item) {
+    @apply w-full flex items-center gap-2 px-2 py-2 rounded-xl text-[14px] text-base-black hover:bg-base-section transition-colors cursor-pointer whitespace-nowrap;
 }
 
-.select-option-item__icon {
-    @apply w-9 h-9 shrink-0 rounded-full bg-base-black text-base-white grid place-items-center;
+.select-option__dropdown :deep(.select-option-item__icon) {
+    @apply w-8 h-8 shrink-0 rounded-full bg-base-black text-base-white grid place-items-center;
 }
 
-.select-option-item__icon i,
-.select-option-item__icon svg {
-    @apply text-base leading-none w-4 h-4;
+.select-option__dropdown :deep(.select-option-item__icon) i,
+.select-option__dropdown :deep(.select-option-item__icon) svg {
+    @apply text-sm leading-none w-4 h-4;
 }
 </style>

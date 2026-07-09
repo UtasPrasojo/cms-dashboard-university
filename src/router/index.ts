@@ -2,8 +2,9 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 import auth from './auth'
 import dashboard from './dashboard'
+import masterData from './master_data'
 
-const arr_routes = [auth,dashboard]
+const arr_routes = [auth,dashboard,masterData]
 const routes = arr_routes.flat(1)
 
 const router = createRouter({

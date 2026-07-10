@@ -2,12 +2,12 @@
   <div class="bg-white rounded-3xl p-4">
 
     <!-- Header -->
-    <div class="flex justify-between items-center">
+    <div class="flex justify-between items-center px-2">
       <h2 class="text-[14px] font-medium">
         Profil Kognitif
       </h2>
 
-      <InformationCircleIcon class="w-6 h-6 text-primary-900" />
+      <IconInformation class="w-4 h-4 text-primary-900" />
     </div>
 
     <!-- Summary -->

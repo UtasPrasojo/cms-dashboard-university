@@ -75,6 +75,7 @@ declare module 'vue' {
     IconCampusSuitCase: typeof import('./src/components/Icon/Campus/SuitCase.vue')['default']
     IconCampusToga: typeof import('./src/components/Icon/Campus/Toga.vue')['default']
     IconDashboard: typeof import('./src/components/Icon/Dashboard.vue')['default']
+    IconDashboardArrow: typeof import('./src/components/Icon/Dashboard/Arrow.vue')['default']
     IconDashboardBook: typeof import('./src/components/Icon/Dashboard/Book.vue')['default']
     IconDashboardCopy: typeof import('./src/components/Icon/Dashboard/Copy.vue')['default']
     IconDashboardFile: typeof import('./src/components/Icon/Dashboard/File.vue')['default']

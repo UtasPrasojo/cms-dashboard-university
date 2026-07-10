@@ -2,12 +2,12 @@
   <div class="bg-white rounded-3xl p-4">
 
     <!-- Header -->
-    <div class="flex justify-between items-center mb-8">
+    <div class="flex justify-between items-center mb-8 px-2">
       <h2 class="text-[14px] font-medium text-primary-900">
         Career Readiness Index
       </h2>
 
-      <InformationCircleIcon class="w-7 h-7 text-primary-900" />
+      <IconInformation class="w-4 h-4 text-primary-900" />
     </div>
 
     <!-- Top Section -->
@@ -19,33 +19,15 @@
         <svg class="w-full h-full -rotate-90">
 
           <!-- Background -->
-          <circle
-            cx="140"
-            cy="140"
-            r="105"
-            stroke="#DDF7F5"
-            stroke-width="26"
-            fill="transparent"
-          />
+          <circle cx="140" cy="140" r="105" stroke="#DDF7F5" stroke-width="26" fill="transparent" />
 
           <!-- Progress -->
-          <circle
-            cx="140"
-            cy="140"
-            r="105"
-            :stroke="progressColor"
-            stroke-width="26"
-            stroke-linecap="round"
-            fill="transparent"
-            :stroke-dasharray="circumference"
-            :stroke-dashoffset="dashOffset"
-          />
+          <circle cx="140" cy="140" r="105" :stroke="progressColor" stroke-width="26" stroke-linecap="round"
+            fill="transparent" :stroke-dasharray="circumference" :stroke-dashoffset="dashOffset" />
 
         </svg>
 
-        <div
-          class="absolute inset-0 flex items-center justify-center flex-col"
-        >
+        <div class="absolute inset-0 flex items-center justify-center flex-col">
           <div class="flex items-end">
             <span class="text-[32px] font-semibold text-primary-900">
               {{ score }}
@@ -66,9 +48,7 @@
           {{ status }}
         </h3>
 
-        <p
-          class="mt-4 text-[12px] leading-9 text-gray-500"
-        >
+        <p class="mt-4 text-[12px] leading-9 text-gray-500">
           {{ description }}
         </p>
 
@@ -79,9 +59,7 @@
     <!-- Bottom Cards -->
     <div class="grid grid-cols-2 gap-6 mt-8">
 
-      <div
-        class="rounded-3xl border border-gray-100 p-6"
-      >
+      <div class="rounded-3xl border border-gray-100 p-6">
         <p class="text-[12px] text-primary-900">
           Terkuat
         </p>
@@ -100,9 +78,7 @@
 
       </div>
 
-      <div
-        class="rounded-3xl border border-gray-100 p-6"
-      >
+      <div class="rounded-3xl border border-gray-100 p-6">
         <p class="text-[12px] text-primary-900">
           Perlu ditingkatkan
         </p>

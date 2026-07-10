@@ -4,16 +4,20 @@ import { validate } from "@/utils/validate";
 import { referralCodeResponseSchema, type ReferralCode } from "@/stores/university/type/referral_code";
 import { distributionStudentResponseSchema, type DistributionStudent } from "@/stores/university/type/distribution_student"
 import { percentageStatsResponseSchema, type PercentageStats } from "@/stores/university/type/percentage_stats"
-import {cognitiveProfileResponseSchema, type CognitiveProfile} from "@/stores/university/type/cognitive_profile"
+import { cognitiveProfileResponseSchema, type CognitiveProfile } from "@/stores/university/type/cognitive_profile"
+import { archetypePersonalityResponseSchema, type ArchetypePersonality } from "@/stores/university/type/archetype_personality"
+import { nineboxMatrixSchema, type NineBoxMatrixResponse } from "@/stores/university/type/ninebox_matrix"
 
 const baseUrl = import.meta.env.VITE_BASE_URL as string;
 
 export const useDashboardStore = defineStore("dashboard", {
     state: () => ({
         referralCode: null as ReferralCode | null,
-        distributionStudent: null as DistributionStudent | null,
+        distributionStudent: null as DistributionStudent[] | null,
         percentageStats: null as PercentageStats | null,
         cognitiveProfile: null as CognitiveProfile | null,
+        archetypePersonality: null as ArchetypePersonality[] | null,
+        nineboxMatrix: null as NineBoxMatrixResponse["data"] | null,
         error: null as string | null,
     }),
 
@@ -73,6 +77,32 @@ export const useDashboardStore = defineStore("dashboard", {
             }
             this.cognitiveProfile = result.data.data
 
-        }
+        },
+        async getArchetypePersonality() {
+            const res = await axiosWrapper.get(
+                `${baseUrl}/admin-university/dashboard/archetypes`
+            );
+            const result = validate(archetypePersonalityResponseSchema, res);
+            if (!result.success) {
+                console.error("Invalid archetype personality response:", result.errors);
+                this.error = "Format data archetype personality tidak valid";
+                return;
+            }
+            this.archetypePersonality = result.data.data
+        },
+        async getNineboxMatrix() {
+            const res = await axiosWrapper.get(
+                `${baseUrl}/admin-university/dashboard/nine-box-matrix`
+            );
+
+            const result = validate(nineboxMatrixSchema, res);
+            if (!result.success) {
+                console.error("Invalid ninebox matrix response:", result.errors);
+                this.error = "Format data ninebox matrix tidak valid";
+                return;
+            }
+
+            this.nineboxMatrix = result.data.data;
+        },
     },
 });

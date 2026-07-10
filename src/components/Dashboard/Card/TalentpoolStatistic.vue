@@ -1,12 +1,12 @@
 <template>
     <div class="rounded-3xl bg-white p-4 mt-4 mr-4 h-full flex flex-col">
         <!-- Header -->
-        <div class="flex items-center justify-between mb-6">
+        <div class="flex items-center justify-between mb-6 px-2">
             <h2 class="text-[14px] font-medium text-primary-900">
                 {{ title }}
             </h2>
 
-            <InformationCircleIcon class="w-4 h-4 text-primary-900" />
+             <IconInformation class="w-4 h-4 text-primary-900" />
         </div>
 
         <!-- Grid -->

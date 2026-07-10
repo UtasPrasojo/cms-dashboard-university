@@ -16,7 +16,7 @@
                         :value="card.value" :description="card.description" :icon="card.icon" />
                 </div>
                 <DashboardCardTalentMatrix :cards="cardsTalent" />
-                <DashboardCardArchetypePersonality />
+                <DashboardCardArchetypePersonality :data="dashboardStore.archetypePersonality" />
             </div>
 
             <div class="w-1/4 pb-4 flex flex-col">
@@ -66,31 +66,7 @@ import type { PosisiNineBox } from '@/stores/university/type/distribution_studen
 
 const dashboardStore = useDashboardStore()
 
-const getPosisiNineBox = (
-    nineBoxSummary: number[]
-): PosisiNineBox => {
-    if (nineBoxSummary.length < 2) {
-        return 'profil solid'
-    }
 
-    const key = `${nineBoxSummary[0]},${nineBoxSummary[1]}`
-
-    const map: Record<string, PosisiNineBox> = {
-        '0,0': 'prioritas intervensi',
-        '0,1': 'perlu pendampingan',
-        '0,2': 'bakat terpendam',
-
-        '1,0': 'perlu dorongan',
-        '1,1': 'profil solid',
-        '1,2': 'bintang berkembang',
-
-        '2,0': 'tekun & konsisten',
-        '2,1': 'pekerja keras berprestasi',
-        '2,2': 'talent unggulan',
-    }
-
-    return map[key] ?? 'profil solid'
-}
 
 
 
@@ -168,76 +144,43 @@ const cards = computed(() => {
         },
     ]
 })
-const cardsTalent: TalentCard[] = [
-    {
-        title: 'Potensi tersembunyi',
-        value: 147,
-        iq: 'IQ tinggi',
-        ipk: 'IPK rendah',
-        icon: Sinus,
-        variant: 'orange',
-    },
-    {
-        title: 'Bintang berkembang',
-        value: 312,
-        iq: 'IQ tinggi',
-        ipk: 'IPK sedang',
-        icon: Star,
-        variant: 'blue',
-    },
-    {
-        title: 'Talent unggulan',
-        value: 172,
-        iq: 'IQ tinggi',
-        ipk: 'IPK tinggi',
-        icon: Thropy,
-        variant: 'green',
-    },
-    {
-        title: 'Potensi tersembunyi',
-        value: 378,
-        iq: 'IQ sedang',
-        ipk: 'IPK rendah',
-        variant: 'default',
-    },
-    {
-        title: 'Potensi tersembunyi',
-        value: 1124,
-        iq: 'IQ sedang',
-        ipk: 'IPK sedang',
-        variant: 'default',
-    },
-    {
-        title: 'Potensi tersembunyi',
-        value: 392,
-        iq: 'IQ sedang',
-        ipk: 'IPK tinggi',
-        icon: Like,
-        variant: 'purple',
-    },
-    {
-        title: 'Prioritas intervensi',
-        value: 213,
-        iq: 'IQ rendah',
-        ipk: 'IPK rendah',
-        icon: Warning,
-        variant: 'red',
-    },
-    {
-        title: 'Potensi tersembunyi',
-        value: 287,
-        iq: 'IQ rendah',
-        ipk: 'IPK sedang',
-        variant: 'default',
-    },
-    {
-        title: 'Potensi tersembunyi',
-        value: 132,
-        iq: 'IQ rendah',
-        ipk: 'IPK tinggi',
-        variant: 'default',
-    },
+const talentMatrixMeta = [
+    [
+        { title: 'Potensi tersembunyi', iq: 'IQ tinggi', ipk: 'IPK rendah', icon: Sinus, variant: 'orange' as const },
+        { title: 'Bintang berkembang', iq: 'IQ tinggi', ipk: 'IPK sedang', icon: Star, variant: 'blue' as const },
+        { title: 'Talent unggulan', iq: 'IQ tinggi', ipk: 'IPK tinggi', icon: Thropy, variant: 'green' as const },
+    ],
+    [
+        { title: 'Potensi tersembunyi', iq: 'IQ sedang', ipk: 'IPK rendah', variant: 'default' as const },
+        { title: 'Potensi tersembunyi', iq: 'IQ sedang', ipk: 'IPK sedang', variant: 'default' as const },
+        { title: 'Potensi tersembunyi', iq: 'IQ sedang', ipk: 'IPK tinggi', icon: Like, variant: 'purple' as const },
+    ],
+    [
+        { title: 'Prioritas intervensi', iq: 'IQ rendah', ipk: 'IPK rendah', icon: Warning, variant: 'red' as const },
+        { title: 'Potensi tersembunyi', iq: 'IQ rendah', ipk: 'IPK sedang', variant: 'default' as const },
+        { title: 'Potensi tersembunyi', iq: 'IQ rendah', ipk: 'IPK tinggi', variant: 'default' as const },
+    ],
 ]
+const cardsTalent = computed<TalentCard[]>(() => {
+    const matrix = dashboardStore.nineboxMatrix
+
+    if (!matrix || matrix.length === 0) {
+        return talentMatrixMeta.flat().map((meta, index) => ({
+            ...meta,
+            value: [147, 312, 172, 378, 1124, 392, 213, 287, 132][index],
+        }))
+    }
+
+    return talentMatrixMeta.flatMap((row, rowIndex) =>
+        row.map((meta, colIndex) => {
+            const raw = matrix[colIndex]?.[2 - rowIndex]
+            return {
+                ...meta,
+                value: raw == null ? 0 : Number(raw), 
+            }
+        })
+    )
+})
 
 
 const referral = {
@@ -428,27 +371,29 @@ const dummyProdiDistribution: ProdiDistribution[] = [
 
 
 const prodiDistribution = computed<ProdiDistribution[]>(() => {
-    const distribution = dashboardStore.distributionStudent;
+    const distribution = dashboardStore.distributionStudent
 
-    if (!distribution) {
-        return dummyProdiDistribution;
+    if (!distribution || distribution.length === 0) {
+        return dummyProdiDistribution
     }
 
-    return distribution.items.map((item) => ({
+    return distribution.map((item) => ({
         name: item.major,
         totalMahasiswa: item.total_student,
-        cvLengkap: item.cv_summary,
-        selesaiAsesmen: item.assessment_summary,
-        careerReadiness: item.career_readiness_summary,
-        alignmentMinat: item.alignment_interest_summary,
-        posisi: getPosisiNineBox(item.nine_box_summary)
-    }));
-});
+        cvLengkap: item.total_cv_completed,
+        selesaiAsesmen: item.total_completed_assessment,
+        careerReadiness: item.total_active_talent_pool,
+        alignmentMinat: 0,
+        posisi: 'profil solid',
+    }))
+})
 
 onMounted(() => {
     dashboardStore.getReferralCode()
     dashboardStore.getDistributionStudent()
     dashboardStore.getPercentageStats()
     dashboardStore.getCognitiveProfile()
+    dashboardStore.getArchetypePersonality()
+    dashboardStore.getNineboxMatrix()
 })
 </script>

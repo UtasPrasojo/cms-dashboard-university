@@ -2,11 +2,7 @@
     <div class="bg-base-white p-4 rounded-3xl mb-4">
         <div class="flex justify-between items-center pb-4">
             <p>9-Box Talent Matrix</p>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                stroke="currentColor" width="16" height="16" class="shrink-0 text-primary-900">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                    d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
-            </svg>
+            <IconDashboardArrow class="w-4 h-4" />
         </div>
         <div class="flex gap-3">
             <!-- Label vertikal: IQ Tinggi / Sedang / Rendah -->
@@ -33,9 +29,17 @@
                                     {{ card.title }}
                                 </p>
 
-                                <h2 class="text-[24px] font-medium mt-2" :class="getVariant(card.variant).text">
-                                    {{ card.value }}
-                                </h2>
+                                <div class="mt-2 flex items-end gap-2">
+                                    <h2 class="text-[24px] font-medium leading-none"
+                                        :class="getVariant(card.variant).text">
+                                        {{ card.value }}
+                                    </h2>
+
+                                    <span class="text-[12px] font-normal leading-none"
+                                        :class="getVariant(card.variant).text">
+                                        Mahasiswa
+                                    </span>
+                                </div>
                             </div>
 
                             <div v-if="card.icon"

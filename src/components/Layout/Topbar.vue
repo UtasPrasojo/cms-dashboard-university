@@ -70,7 +70,7 @@
         class="relative w-9 h-9 rounded-full bg-base-white grid place-items-center text-text-500 shrink-0 shadow-lg"
         title="Notifikasi"
       >
-        <i class="fi fi-rr-bell text-base leading-none"></i>
+        <IconBell class="w-5 h-5" />
         <span class="absolute top-2 right-2 w-1.5 h-1.5 rounded-full bg-error-500"></span>
       </button>
 

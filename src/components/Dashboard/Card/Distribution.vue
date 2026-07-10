@@ -26,7 +26,7 @@
             <span class="font-medium text-gray-800">{{ prodi.faculty }}</span>
           </TbData>
 
-          <TbData>{{ formatNumber(prodi.totalMahasiswa) }}</TbData>
+          <TbData class="text-center">{{ formatNumber(prodi.totalMahasiswa) }}</TbData>
 
           <TbData>
             <div class="flex items-center gap-3 min-w-[220px]">
@@ -46,8 +46,8 @@
             </div>
           </TbData>
 
-          <TbData>{{ prodi.careerReadiness }}</TbData>
-          <TbData>{{ prodi.alignmentMinat }}%</TbData>
+          <TbData class="text-center">{{ prodi.careerReadiness }}</TbData>
+    
 
           
         </TbRow>

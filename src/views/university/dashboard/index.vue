@@ -37,12 +37,12 @@
             </div>
         </div>
         <div class="relative z-10 w-full px-4 mt-4 mb-4">
-            <DashboardCardDistribution :data="prodiDistribution" />
+            <DashboardCardDistribution :data="prodiDistribution" :pagination-filter="distributionPaginationFilter" />
         </div>
     </div>
 </template>
 <script setup lang="ts">
-import { onMounted, computed } from 'vue'
+import { onMounted, computed, watch } from 'vue'
 import { useDashboardStore } from '@/stores/university/dashboard.store'
 
 
@@ -176,7 +176,7 @@ const cardsTalent = computed<TalentCard[]>(() => {
             const raw = matrix[colIndex]?.[2 - rowIndex]
             return {
                 ...meta,
-                value: raw == null ? 0 : Number(raw), 
+                value: raw == null ? 0 : Number(raw),
             }
         })
     )
@@ -371,13 +371,13 @@ const dummyProdiDistribution: ProdiDistribution[] = [
 
 
 const prodiDistribution = computed<ProdiDistribution[]>(() => {
-    const distribution = dashboardStore.distributionStudent
+    const items = dashboardStore.distributionStudent?.items
 
-    if (!distribution || distribution.length === 0) {
+    if (!items || items.length === 0) {
         return dummyProdiDistribution
     }
 
-    return distribution.map((item) => ({
+    return items.map((item) => ({
         name: item.major,
         totalMahasiswa: item.total_student,
         cvLengkap: item.total_cv_completed,
@@ -387,6 +387,22 @@ const prodiDistribution = computed<ProdiDistribution[]>(() => {
         posisi: 'profil solid',
     }))
 })
+
+const distributionPaginationFilter = computed(() => ({
+    get page() { return dashboardStore.distributionFilter.page },
+    set page(value: number) { dashboardStore.distributionFilter.page = value },
+    get size() { return dashboardStore.distributionFilter.size },
+    set size(value: number) { dashboardStore.distributionFilter.size = value },
+    total_page: dashboardStore.distributionTotalPage,
+    page_index: dashboardStore.distributionStudent?.pagination.page ?? 1,
+}))
+
+watch(
+    () => [dashboardStore.distributionFilter.page, dashboardStore.distributionFilter.size],
+    () => {
+        dashboardStore.getDistributionStudent()
+    }
+)
 
 onMounted(() => {
     dashboardStore.getReferralCode()

@@ -1,77 +1,70 @@
 <template>
-  <div class="bg-white rounded-2xl border border-gray-100 shadow-sm">
-    <div class="flex items-center justify-between px-6 py-5 border-b border-gray-100">
+  <div class="w-full bg-base-white rounded-2xl p-6 custom-shadow">
+    <div class="flex items-center justify-between pb-5 border-b border-gray-100">
       <h3 class="text-[14px] font-normal text-gray-800">{{ title }}</h3>
       <InformationCircleIcon class="w-5 h-5 text-primary-900" />
     </div>
 
-    <div class="overflow-x-auto">
-      <table class="w-full text-sm">
-        <thead>
-          <tr class="bg-gray-50">
-            <th class="text-left font-medium text-[#303030] px-6 py-4 whitespace-nowrap">Program Studi</th>
-            <th class="text-left font-medium text-[#303030] px-6 py-4 whitespace-nowrap">Mahasiswa</th>
-            <th class="text-left font-medium text-[#303030] px-6 py-4 whitespace-nowrap min-w-[220px]">CV Lengkap</th>
-            <th class="text-left font-medium text-[#303030] px-6 py-4 whitespace-nowrap min-w-[220px]">Selesai Asesmen
-            </th>
-            <th class="text-left font-medium text-[#303030] px-6 py-4 whitespace-nowrap">Career Readiness</th>
-            <th class="text-left font-medium text-[#303030] px-6 py-4 whitespace-nowrap">Alignment Minat</th>
-            <th class="text-left font-medium text-[#303030] px-6 py-4 whitespace-nowrap">Posisi 9-Box</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(prodi, index) in data" :key="index" class="border-b border-gray-50 last:border-none">
-            <td class="px-6 py-4 text-gray-800 font-medium whitespace-nowrap">
-              {{ prodi.name }}
-            </td>
-            <td class="px-6 py-4 text-gray-700 whitespace-nowrap">
-              {{ formatNumber(prodi.totalMahasiswa) }}
-            </td>
+    <TbMain :size="paginationFilter.size" :data="data">
+      <thead>
+        <TbRow type="head">
+          <TbHead>Program Studi</TbHead>
+          <TbHead>Mahasiswa</TbHead>
+          <TbHead>CV Lengkap</TbHead>
+          <TbHead>Selesai Asesmen</TbHead>
+          <TbHead>Career Readiness</TbHead>
+          <TbHead>Alignment Minat</TbHead>
+          <TbHead align="center">Posisi 9-Box</TbHead>
+        </TbRow>
+      </thead>
+      <tbody>
+        <TbRow v-for="(prodi, index) in data" :key="index">
+          <TbData>
+            <span class="font-medium text-gray-800">{{ prodi.name }}</span>
+          </TbData>
 
-            <td class="px-6 py-4">
-              <div class="flex items-center gap-3">
-                <BarProgressBar :value="prodi.cvLengkap" :color="getColor(prodi.cvLengkap)" class="flex-1" />
-                <span class="text-gray-800 font-semibold w-10 text-right">
-                  {{ prodi.cvLengkap }}%
-                </span>
-              </div>
-            </td>
+          <TbData>{{ formatNumber(prodi.totalMahasiswa) }}</TbData>
 
-            <td class="px-6 py-4">
-              <div class="flex items-center gap-3">
-                <BarProgressBar :value="prodi.selesaiAsesmen" :color="getColor(prodi.selesaiAsesmen)" class="flex-1" />
-                <span class="text-gray-800 font-semibold w-10 text-right">
-                  {{ prodi.selesaiAsesmen }}%
-                </span>
-              </div>
-            </td>
-
-            <td class="px-6 py-4 text-gray-700 whitespace-nowrap">
-              {{ prodi.careerReadiness }}
-            </td>
-            <td class="px-6 py-4 text-gray-700 whitespace-nowrap">
-              {{ prodi.alignmentMinat }}%
-            </td>
-
-            <td class="px-6 py-4 whitespace-nowrap">
-              <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium"
-                :class="badgeClass(prodi.posisi)">
-                <span class="w-1.5 h-1.5 rounded-full" :class="dotClass(prodi.posisi)"></span>
-                {{ posisiLabel(prodi.posisi) }}
+          <TbData>
+            <div class="flex items-center gap-3 min-w-[220px]">
+              <BarProgressBar :value="prodi.cvLengkap" :color="getColor(prodi.cvLengkap)" class="flex-1" />
+              <span class="text-gray-800 font-semibold w-10 text-right">
+                {{ prodi.cvLengkap }}%
               </span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+            </div>
+          </TbData>
+
+          <TbData>
+            <div class="flex items-center gap-3 min-w-[220px]">
+              <BarProgressBar :value="prodi.selesaiAsesmen" :color="getColor(prodi.selesaiAsesmen)" class="flex-1" />
+              <span class="text-gray-800 font-semibold w-10 text-right">
+                {{ prodi.selesaiAsesmen }}%
+              </span>
+            </div>
+          </TbData>
+
+          <TbData>{{ prodi.careerReadiness }}</TbData>
+          <TbData>{{ prodi.alignmentMinat }}%</TbData>
+
+          <TbData align="center">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium"
+              :class="badgeClass(prodi.posisi)">
+              <span class="w-1.5 h-1.5 rounded-full" :class="dotClass(prodi.posisi)"></span>
+              {{ posisiLabel(prodi.posisi) }}
+            </span>
+          </TbData>
+        </TbRow>
+      </tbody>
+    </TbMain>
+
+    <TbPaginate :filter="paginationFilter" empty_title="Belum ada data distribusi"
+      empty_desc="Data distribusi prodi akan muncul di sini" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { InformationCircleIcon } from '@heroicons/vue/24/outline'
 import type { PosisiNineBox } from '@/stores/university/type/distribution_student'
-
-
 
 export interface ProdiDistribution {
   name: string
@@ -83,9 +76,17 @@ export interface ProdiDistribution {
   posisi: PosisiNineBox
 }
 
+interface PaginationFilter {
+  page: number
+  size: number
+  total_page: number
+  page_index: number
+}
+
 interface Props {
   title?: string
   data: ProdiDistribution[]
+  paginationFilter: PaginationFilter
 }
 
 withDefaults(defineProps<Props>(), {
@@ -106,21 +107,13 @@ const posisiLabel = (posisi: PosisiNineBox) =>
 const badgeClass = (posisi: PosisiNineBox) => {
   const map: Record<PosisiNineBox, string> = {
     'prioritas intervensi': 'bg-[#FC8078] text-white',
-
     'bakat terpendam': 'bg-[#FFB26A] text-white',
-
     'bintang berkembang': 'bg-[#335ACC] text-white',
-
     'pekerja keras berprestasi': 'bg-[#705DEF] text-white',
-
     'talent unggulan': 'bg-[#009E84] text-white',
-
     'perlu pendampingan': 'bg-[#F9FBFE] text-black',
-
     'perlu dorongan': 'bg-[#F9FBFE] text-black',
-
     'profil solid': 'bg-[#F9FBFE] text-black',
-
     'tekun & konsisten': 'bg-[#F9FBFE] text-black',
   }
 

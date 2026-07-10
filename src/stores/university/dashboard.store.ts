@@ -2,10 +2,10 @@ import { defineStore } from "pinia";
 import { axiosWrapper } from "@/helpers/axios-wrapper";
 import { validate } from "@/utils/validate";
 import { referralCodeResponseSchema, type ReferralCode } from "@/stores/university/type/referral_code";
-import { distributionStudentResponseSchema, type DistributionStudent } from "@/stores/university/type/distribution_student"
+import { distributionStudentResponseSchema, type DistributionStudentData } from "@/stores/university/type/distribution_student"
 import { percentageStatsResponseSchema, type PercentageStats } from "@/stores/university/type/percentage_stats"
-import { cognitiveProfileResponseSchema, type CognitiveProfile } from "@/stores/university/type/cognitive_profile"
-import { archetypePersonalityResponseSchema, type ArchetypePersonality } from "@/stores/university/type/archetype_personality"
+import {cognitiveProfileResponseSchema, type CognitiveProfile} from "@/stores/university/type/cognitive_profile"
+import  {archetypePersonalityResponseSchema, type ArchetypePersonality} from "@/stores/university/type/archetype_personality"
 import { nineboxMatrixSchema, type NineBoxMatrixResponse } from "@/stores/university/type/ninebox_matrix"
 
 const baseUrl = import.meta.env.VITE_BASE_URL as string;
@@ -13,13 +13,25 @@ const baseUrl = import.meta.env.VITE_BASE_URL as string;
 export const useDashboardStore = defineStore("dashboard", {
     state: () => ({
         referralCode: null as ReferralCode | null,
-        distributionStudent: null as DistributionStudent[] | null,
+        distributionStudent: null as DistributionStudentData | null,
+        distributionFilter: {
+            page: 1,
+            size: 10,
+        },
         percentageStats: null as PercentageStats | null,
         cognitiveProfile: null as CognitiveProfile | null,
-        archetypePersonality: null as ArchetypePersonality[] | null,
+        archetypePersonality : null as ArchetypePersonality[] | null,
         nineboxMatrix: null as NineBoxMatrixResponse["data"] | null,
         error: null as string | null,
     }),
+
+    getters: {
+        distributionTotalPage: (state) => {
+            const pagination = state.distributionStudent?.pagination
+            if (!pagination || !pagination.size) return 1
+            return Math.ceil(pagination.total / pagination.size)
+        },
+    },
 
     actions: {
 
@@ -52,8 +64,13 @@ export const useDashboardStore = defineStore("dashboard", {
             this.referralCode = result.data.data;
         },
         async getDistributionStudent() {
+            const query = new URLSearchParams({
+                page: String(this.distributionFilter.page),
+                size: String(this.distributionFilter.size),
+            })
+
             const res = await axiosWrapper.get(
-                `${baseUrl}/admin-university/dashboard/student-major-distribution`
+                `${baseUrl}/admin-university/dashboard/student-major-distribution?${query.toString()}`
             );
 
             const result = validate(distributionStudentResponseSchema, res);
@@ -78,7 +95,7 @@ export const useDashboardStore = defineStore("dashboard", {
             this.cognitiveProfile = result.data.data
 
         },
-        async getArchetypePersonality() {
+        async getArchetypePersonality(){
             const res = await axiosWrapper.get(
                 `${baseUrl}/admin-university/dashboard/archetypes`
             );
@@ -92,7 +109,7 @@ export const useDashboardStore = defineStore("dashboard", {
         },
         async getNineboxMatrix() {
             const res = await axiosWrapper.get(
-                `${baseUrl}/admin-university/dashboard/nine-box-matrix`
+                `${baseUrl}/admin-university/dashboard/ninebox-matrix`
             );
 
             const result = validate(nineboxMatrixSchema, res);

@@ -9,18 +9,21 @@
       <thead>
         <TbRow type="head">
           <TbHead>Program Studi</TbHead>
-          <TbHead>Mahasiswa</TbHead>
+          <TbHead>Fakultas</TbHead>
+          <TbHead>Jumlah Mahasiswa</TbHead>
           <TbHead>CV Lengkap</TbHead>
           <TbHead>Selesai Asesmen</TbHead>
           <TbHead>Career Readiness</TbHead>
-          <TbHead>Alignment Minat</TbHead>
-          <TbHead align="center">Posisi 9-Box</TbHead>
+     
         </TbRow>
       </thead>
       <tbody>
         <TbRow v-for="(prodi, index) in data" :key="index">
           <TbData>
             <span class="font-medium text-gray-800">{{ prodi.name }}</span>
+          </TbData>
+            <TbData>
+            <span class="font-medium text-gray-800">{{ prodi.faculty }}</span>
           </TbData>
 
           <TbData>{{ formatNumber(prodi.totalMahasiswa) }}</TbData>
@@ -46,13 +49,7 @@
           <TbData>{{ prodi.careerReadiness }}</TbData>
           <TbData>{{ prodi.alignmentMinat }}%</TbData>
 
-          <TbData align="center">
-            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium"
-              :class="badgeClass(prodi.posisi)">
-              <span class="w-1.5 h-1.5 rounded-full" :class="dotClass(prodi.posisi)"></span>
-              {{ posisiLabel(prodi.posisi) }}
-            </span>
-          </TbData>
+          
         </TbRow>
       </tbody>
     </TbMain>
@@ -64,16 +61,15 @@
 
 <script setup lang="ts">
 import { InformationCircleIcon } from '@heroicons/vue/24/outline'
-import type { PosisiNineBox } from '@/stores/university/type/distribution_student'
 
 export interface ProdiDistribution {
   name: string
+  faculty: string
   totalMahasiswa: number
   cvLengkap: number
   selesaiAsesmen: number
   careerReadiness: number
   alignmentMinat: number
-  posisi: PosisiNineBox
 }
 
 interface PaginationFilter {
@@ -101,35 +97,7 @@ const getColor = (value: number): 'success' | 'warning' | 'danger' => {
   return 'success'
 }
 
-const posisiLabel = (posisi: PosisiNineBox) =>
-  posisi.charAt(0).toUpperCase() + posisi.slice(1)
 
-const badgeClass = (posisi: PosisiNineBox) => {
-  const map: Record<PosisiNineBox, string> = {
-    'prioritas intervensi': 'bg-[#FC8078] text-white',
-    'bakat terpendam': 'bg-[#FFB26A] text-white',
-    'bintang berkembang': 'bg-[#335ACC] text-white',
-    'pekerja keras berprestasi': 'bg-[#705DEF] text-white',
-    'talent unggulan': 'bg-[#009E84] text-white',
-    'perlu pendampingan': 'bg-[#F9FBFE] text-black',
-    'perlu dorongan': 'bg-[#F9FBFE] text-black',
-    'profil solid': 'bg-[#F9FBFE] text-black',
-    'tekun & konsisten': 'bg-[#F9FBFE] text-black',
-  }
 
-  return map[posisi]
-}
 
-const dotClass = (posisi: PosisiNineBox) => {
-  const lightBadge = [
-    'perlu pendampingan',
-    'perlu dorongan',
-    'profil solid',
-    'tekun & konsisten',
-  ]
-
-  return lightBadge.includes(posisi)
-    ? 'bg-black'
-    : 'bg-white'
-}
 </script>

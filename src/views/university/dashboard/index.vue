@@ -59,9 +59,7 @@ import Idea from '@/components/Icon/Dashboard/Idea.vue'
 
 
 import type { TalentCard } from '@/components/Dashboard/Card/TalentMatrix.vue'
-import { CpuChipIcon } from '@heroicons/vue/24/outline'
 import type { ProdiDistribution } from '@/components/Dashboard/Card/Distribution.vue'
-import type { PosisiNineBox } from '@/stores/university/type/distribution_student'
 
 
 const dashboardStore = useDashboardStore()
@@ -321,70 +319,21 @@ const careerReadiness = {
     },
 }
 
-const dummyProdiDistribution: ProdiDistribution[] = [
-    {
-        name: 'Teknik Informatika',
-        totalMahasiswa: 1247,
-        cvLengkap: 82,
-        selesaiAsesmen: 78,
-        careerReadiness: 923,
-        alignmentMinat: 74,
-        posisi: 'talent unggulan',
-    },
-    {
-        name: 'Psikologi',
-        totalMahasiswa: 743,
-        cvLengkap: 76,
-        selesaiAsesmen: 71,
-        careerReadiness: 498,
-        alignmentMinat: 67,
-        posisi: 'bintang berkembang',
-    },
-    {
-        name: 'Ilmu Hukum',
-        totalMahasiswa: 892,
-        cvLengkap: 23,
-        selesaiAsesmen: 58,
-        careerReadiness: 518,
-        alignmentMinat: 52,
-        posisi: 'profil solid',
-    },
-    {
-        name: 'Komunikasi',
-        totalMahasiswa: 621,
-        cvLengkap: 79,
-        selesaiAsesmen: 68,
-        careerReadiness: 391,
-        alignmentMinat: 63,
-        posisi: 'bakat terpendam',
-    },
-    {
-        name: 'Akuntansi',
-        totalMahasiswa: 344,
-        cvLengkap: 61,
-        selesaiAsesmen: 49,
-        careerReadiness: 175,
-        alignmentMinat: 44,
-        posisi: 'prioritas intervensi',
-    },
-]
+
 
 
 const prodiDistribution = computed<ProdiDistribution[]>(() => {
     const items = dashboardStore.distributionStudent?.items
 
-    if (!items || items.length === 0) {
-        return dummyProdiDistribution
-    }
 
-    return items.map((item) => ({
+    return (items ?? []).map((item) => ({
         name: item.major,
         totalMahasiswa: item.total_student,
         cvLengkap: item.total_cv_completed,
         selesaiAsesmen: item.total_completed_assessment,
         careerReadiness: item.total_active_talent_pool,
         alignmentMinat: 0,
-        posisi: 'profil solid',
+        faculty: item.faculty
     }))
 })
 

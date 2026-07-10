@@ -14,6 +14,7 @@ export const useDashboardStore = defineStore("dashboard", {
     state: () => ({
         referralCode: null as ReferralCode | null,
         distributionStudent: null as DistributionStudentData | null,
+        distributionStudentFaculty: null as DistributionStudentData | null,
         distributionFilter: {
             page: 1,
             size: 10,
@@ -109,7 +110,7 @@ export const useDashboardStore = defineStore("dashboard", {
         },
         async getNineboxMatrix() {
             const res = await axiosWrapper.get(
-                `${baseUrl}/admin-university/dashboard/ninebox-matrix`
+                `${baseUrl}/admin-university/dashboard/nine-box-matrix`
             );
 
             const result = validate(nineboxMatrixSchema, res);

@@ -30,14 +30,3 @@ export type Pagination = z.infer<typeof paginationSchema>;
 export type DistributionStudent = z.infer<typeof distributionStudentItemSchema>;
 export type DistributionStudentData = z.infer<typeof distributionStudentSchema>;
 export type DistributionStudentResponse = z.infer<typeof distributionStudentResponseSchema>;
-
-export type PosisiNineBox =
-  | 'prioritas intervensi'
-  | 'bakat terpendam'
-  | 'bintang berkembang'
-  | 'pekerja keras berprestasi'
-  | 'talent unggulan'
-  | 'perlu pendampingan'
-  | 'perlu dorongan'
-  | 'profil solid'
-  | 'tekun & konsisten'

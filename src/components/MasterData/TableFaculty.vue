@@ -21,7 +21,9 @@
                     <TbData>{{ faculty.name }}</TbData>
                     <TbData>{{ faculty.major_count }}</TbData>
                     <TbData align="center">
-                        <TbActionIcon icon="fi fi-rr-eye" title="Lihat Detail" type="netral" />
+                        <div class="flex items-center justify-center">
+                            <TbActionIcon icon="fi fi-rr-eye" title="Lihat Detail" type="netral" />
+                        </div>
                     </TbData>
                 </TbRow>
             </tbody>

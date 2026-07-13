@@ -42,10 +42,12 @@
                                 </div>
                             </div>
 
-                            <div v-if="card.icon"
-                                class="w-11 h-11 rounded-full flex items-center justify-center shadow-md"
-                                :class="getVariant(card.variant).iconBg">
-                                <component :is="card.icon" class="w-6 h-6 text-white" />
+                            <div v-if="card.icon" class="rounded-full p-[5px]"
+                                :class="getVariant(card.variant).iconOuter">
+                                <div class="w-11 h-11 rounded-full flex items-center justify-center shadow-sm"
+                                    :class="getVariant(card.variant).iconBg">
+                                    <component :is="card.icon" class="w-6 h-6 text-white" />
+                                </div>
                             </div>
                         </div>
 
@@ -83,36 +85,42 @@ defineProps<{
 }>()
 
 const variants = {
-    orange: {
-        bg: 'bg-orange-50',
-        text: 'text-orange-600',
-        iconBg: 'bg-orange-400',
-    },
-    blue: {
-        bg: 'bg-indigo-100',
-        text: 'text-blue-700',
-        iconBg: 'bg-blue-600',
-    },
-    green: {
-        bg: 'bg-teal-50',
-        text: 'text-teal-600',
-        iconBg: 'bg-teal-500',
-    },
-    purple: {
-        bg: 'bg-violet-100',
-        text: 'text-violet-500',
-        iconBg: 'bg-violet-500',
-    },
-    red: {
-        bg: 'bg-red-100',
-        text: 'text-red-500',
-        iconBg: 'bg-red-500',
-    },
-    default: {
-        bg: 'bg-[#F4F4F4]',
-        text: 'text-slate-800',
-        iconBg: 'bg-gray-400',
-    },
+  orange: {
+    bg: 'bg-orange-50',
+    text: 'text-orange-600',
+    iconBg: 'bg-orange-400',
+    iconOuter: 'bg-orange-400/20',
+  },
+  blue: {
+    bg: 'bg-indigo-100',
+    text: 'text-blue-700',
+    iconBg: 'bg-blue-600',
+    iconOuter: 'bg-blue-600/20',
+  },
+  green: {
+    bg: 'bg-teal-50',
+    text: 'text-teal-600',
+    iconBg: 'bg-teal-500',
+    iconOuter: 'bg-teal-500/20',
+  },
+  purple: {
+    bg: 'bg-violet-100',
+    text: 'text-violet-500',
+    iconBg: 'bg-violet-500',
+    iconOuter: 'bg-violet-500/20',
+  },
+  red: {
+    bg: 'bg-red-100',
+    text: 'text-red-500',
+    iconBg: 'bg-red-500',
+    iconOuter: 'bg-red-500/20',
+  },
+  default: {
+    bg: 'bg-[#F4F4F4]',
+    text: 'text-slate-800',
+    iconBg: 'bg-gray-400',
+    iconOuter: 'bg-gray-400/20',
+  },
 }
 
 const getVariant = (variant?: TalentVariant) => variants[variant ?? 'default']

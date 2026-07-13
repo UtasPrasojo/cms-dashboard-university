@@ -59,7 +59,7 @@
     <!-- Bottom Cards -->
     <div class="grid grid-cols-2 gap-6 mt-8">
 
-      <div class="rounded-3xl border border-gray-100 p-6">
+      <div class="rounded-3xl bg-[#F9FBFE] border border-gray-100 p-6">
         <p class="text-[12px] text-primary-900">
           Terkuat
         </p>
@@ -78,7 +78,7 @@
 
       </div>
 
-      <div class="rounded-3xl border border-gray-100 p-6">
+      <div class="rounded-3xl bg-[#F9FBFE] border border-gray-100 p-6">
         <p class="text-[12px] text-primary-900">
           Perlu ditingkatkan
         </p>

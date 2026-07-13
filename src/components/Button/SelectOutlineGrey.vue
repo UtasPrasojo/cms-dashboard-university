@@ -1,7 +1,7 @@
 <template>
   <div class="w-full" ref="rootRef">
     <!-- Label -->
-    <label v-if="label" class="block text-sm text-gray-900 mb-2">
+    <label v-if="label" class="block text-[14px] text-gray-900 mb-2">
       {{ label }} <span v-if="required" class="text-primary-500">*</span>
     </label>
 
@@ -16,8 +16,8 @@
         type="button"
       >
         <span
-          class="text-sm md:text-base truncate"
-          :class="isPlaceholder ? 'text-[#DBDBDB]' : 'text-gray-900'"
+          class="text-sm md:text-[14px] truncate"
+          :class="isPlaceholder ? 'text-[#DBDBDB]' : 'text-[#71717A]'"
         >
           {{ selectedLabel }}
         </span>
@@ -41,7 +41,7 @@
             v-model="search"
             type="text"
             :placeholder="searchPlaceholder"
-            class="w-full pl-4 pr-10 py-3 bg-[#F9FAFB] border border-[#DBDBDB] rounded-2xl text-sm text-gray-900 placeholder-[#DBDBDB] focus:outline-none"
+            class="w-full pl-4 pr-10 py-2 bg-[#F9FAFB] border border-[#DBDBDB] rounded-2xl text-sm text-gray-900 placeholder-[#DBDBDB] focus:outline-none"
           />
           <MagnifyingGlassIcon
             class="w-5 h-5 text-gray-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none"
@@ -54,11 +54,11 @@
             v-for="(option, index) in filteredOptions"
             :key="index"
             @click="selectOption(option)"
-            class="px-4 py-3 mb-1 rounded-2xl cursor-pointer text-sm md:text-base transition-colors"
+            class="px-4 py-3 mb-1 rounded-2xl cursor-pointer text-sm md:text-[14px] transition-colors"
             :class="
               isSelected(option)
                 ? 'bg-primary-500 text-white'
-                : 'text-gray-700 hover:bg-gray-50'
+                : 'text-[#71717A] hover:text-base-white hover:bg-primary-500'
             "
           >
             {{ option.label }}
@@ -124,7 +124,7 @@ const props = defineProps({
   },
   searchPlaceholder: {
     type: String,
-    default: "Cari",
+    default: "Cari Fakultas",
   },
   showAddNew: {
     type: Boolean,

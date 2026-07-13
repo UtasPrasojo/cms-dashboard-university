@@ -41,11 +41,13 @@ export const axiosWrapper: {
   get: RequestFn;
   post: RequestFn;
   put: RequestFn;
+  patch: RequestFn;
   delete: RequestFn;
 } = {
   get: request("GET"),
   post: request("POST"),
   put: request("PUT"),
+  patch: request("PATCH"),
   delete: request("DELETE"),
 };
 

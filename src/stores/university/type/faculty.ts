@@ -1,10 +1,10 @@
-export interface Root {
-  data: Data
+export interface FacultyResponseScema {
+  data: FacultyResponse
   message: string
   error: unknown
 }
 
-export interface Data {
+export interface FacultyResponse {
   pagination: Pagination
   items: Item[]
 }

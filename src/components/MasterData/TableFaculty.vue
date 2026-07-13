@@ -104,6 +104,14 @@ const facultyStore = useFacultystore()
 const helperStore = useHelperStore()
 const toastStore = useToastStore()
 
+const showDetailModal = ref(false)
+const selectedFaculty = ref(null)
+const editFacultyName = ref('')
+const facultyMajors = ref([])
+const facultyDetailLoading = ref(false)
+const showDeleteModal = ref(false)
+const deleteConfirmName = ref('')
+
 const fetchParams = computed(() => ({
     page: facultyStore.filter.page,
     size: facultyStore.filter.size,
@@ -118,9 +126,6 @@ const fetchFaculties = async () => {
     helperStore.deactivate()
 }
 
-onMounted(fetchFaculties)
-watch(fetchParams, fetchFaculties)
-
 const paginationFilter = computed(() => ({
     get page() { return facultyStore.filter.page },
     set page(value) { facultyStore.filter.page = value },
@@ -130,7 +135,6 @@ const paginationFilter = computed(() => ({
     page_index: facultyStore.pageIndex,
 }))
 
-// Tambah Fakultas
 const showAddModal = ref(false)
 const newFacultyName = ref('')
 
@@ -150,13 +154,6 @@ const handleAddFaculty = async () => {
     showAddModal.value = false
     await fetchFaculties()
 }
-
-// Detail / Ubah Fakultas
-const showDetailModal = ref(false)
-const selectedFaculty = ref(null)
-const editFacultyName = ref('')
-const facultyMajors = ref([])
-const facultyDetailLoading = ref(false)
 
 const openDetailModal = async (faculty) => {
     selectedFaculty.value = faculty
@@ -196,9 +193,7 @@ const handleUpdateFaculty = async () => {
     await fetchFaculties()
 }
 
-// Hapus Fakultas
-const showDeleteModal = ref(false)
-const deleteConfirmName = ref('')
+
 
 const isDeleteConfirmed = computed(() =>
     !!selectedFaculty.value && deleteConfirmName.value.trim() === selectedFaculty.value.name
@@ -229,4 +224,7 @@ const handleDeleteFaculty = async () => {
     selectedFaculty.value = null
     await fetchFaculties()
 }
+
+onMounted(fetchFaculties)
+watch(fetchParams, fetchFaculties)
 </script>

@@ -6,7 +6,7 @@ import type {
     FacultyDetailRoot,
     FacultyState,
     GetFacultyParams,
-    Root,
+    FacultyResponseScema,
 } from "@/stores/university/type/faculty";
 
 const baseUrl = import.meta.env.VITE_BASE_URL as string;
@@ -66,7 +66,7 @@ export const useFacultystore = defineStore("faculty", {
                     ? `${baseUrl}/admin-university/master/faculties?${queryString}`
                     : `${baseUrl}/admin-university/master/faculties`;
 
-                const res: Root = await axiosWrapper.get(url);
+                const res: FacultyResponseScema = await axiosWrapper.get(url);
 
                 if ((res as unknown as { status: number }).status?.toString()[0] !== "2") {
                     this.error = res.message || "Gagal mengambil data faculty";
@@ -89,7 +89,7 @@ export const useFacultystore = defineStore("faculty", {
 
             try {
                 const url = `${baseUrl}/admin-university/master/faculties?page=1&size=100`;
-                const res: Root = await axiosWrapper.get(url);
+                const res: FacultyResponseScema = await axiosWrapper.get(url);
 
                 if ((res as unknown as { status: number }).status?.toString()[0] !== "2") {
                     this.error = res.message || "Gagal mengambil data faculty";
@@ -133,7 +133,7 @@ export const useFacultystore = defineStore("faculty", {
 
             try {
                 const url = `${baseUrl}/admin-university/master/faculties`;
-                const res: Root = await axiosWrapper.post(url, payload);
+                const res: FacultyResponseScema = await axiosWrapper.post(url, payload);
 
                 if ((res as unknown as { status: number }).status?.toString()[0] !== "2") {
                     this.error = res.message || "Gagal menambahkan faculty";
@@ -155,7 +155,7 @@ export const useFacultystore = defineStore("faculty", {
 
             try {
                 const url = `${baseUrl}/admin-university/master/faculties/${facultyId}`;
-                const res: Root = await axiosWrapper.put(url, payload);
+                const res: FacultyResponseScema = await axiosWrapper.put(url, payload);
 
                 if ((res as unknown as { status: number }).status?.toString()[0] !== "2") {
                     this.error = res.message || "Gagal memperbarui faculty";
@@ -177,7 +177,7 @@ export const useFacultystore = defineStore("faculty", {
 
             try {
                 const url = `${baseUrl}/admin-university/master/faculties/${facultyId}`;
-                const res: Root = await axiosWrapper.delete(url, payload);
+                const res: FacultyResponseScema = await axiosWrapper.delete(url, payload);
 
                 if ((res as unknown as { status: number }).status?.toString()[0] !== "2") {
                     this.error = res.message || "Gagal menghapus faculty";

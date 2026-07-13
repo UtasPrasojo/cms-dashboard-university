@@ -2,7 +2,7 @@
   <Transition enter-active-class="transition-all duration-300" enter-from-class="opacity-0 translate-y-3"
     enter-to-class="opacity-100 translate-y-0" leave-active-class="transition-all duration-200"
     leave-from-class="opacity-100 translate-y-0" leave-to-class="opacity-0 translate-y-3">
-    <div v-if="show" class="relative overflow-hidden rounded-[28px]  shadow-xl p-6 flex items-start gap-5 w-[312px]"
+    <div v-if="show" class="relative overflow-hidden rounded-[28px]  shadow-xl p-4 flex items-start gap-5 w-[340px]"
       :style="{ backgroundColor }">
       <!-- Background Decoration -->
       <div class="absolute left-0 top-0 w-[80px] h-[80px] rounded-br-[90px]"
@@ -19,7 +19,7 @@
       </div>
 
       <!-- Content -->
-      <div class="relative z-10 flex-1 pr-10">
+      <div class="relative z-10 flex-1 pr-10 w-full">
         <h3 class="font-bold text-[14px] text-[#1D1B3F]">
           {{ title }}
         </h3>

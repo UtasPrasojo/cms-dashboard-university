@@ -2,15 +2,26 @@ import { defineStore } from "pinia";
 import { axiosWrapper } from "@/helpers/axios-wrapper";
 import type {
     CreateFacultyPayload,
+    Faculty,
+    FacultyDetailRoot,
     FacultyState,
     GetFacultyParams,
     Root,
 } from "@/stores/university/type/faculty";
 
 const baseUrl = import.meta.env.VITE_BASE_URL as string;
+
+function extractErrorMessage(error: unknown, fallback: string): string {
+    const res = error as { data?: { message?: string; errors?: { message: string }[] } } | undefined;
+    return res?.data?.errors?.map((item) => item.message).join(", ")
+        || res?.data?.message
+        || fallback;
+}
+
 export const useFacultystore = defineStore("faculty", {
     state: (): FacultyState => ({
         faculties: [],
+        allFaculties: [],
         filter: {
             page: 1,
             size: 10,
@@ -64,11 +75,53 @@ export const useFacultystore = defineStore("faculty", {
 
                 this.faculties = res.data.items;
                 this.filter.total = res.data.pagination.total;
-                this.filter.page = res.data.pagination.page;
-                this.filter.size = res.data.pagination.size;
             } catch (error) {
                 console.error("Failed to fetch faculties:", error);
-                this.error = "Terjadi kesalahan saat mengambil data faculty";
+                this.error = extractErrorMessage(error, "Terjadi kesalahan saat mengambil data faculty");
+            } finally {
+                this.loading = false;
+            }
+        },
+
+        async getAllFaculties(): Promise<void> {
+            this.loading = true;
+            this.error = null;
+
+            try {
+                const url = `${baseUrl}/admin-university/master/faculties?page=1&size=100`;
+                const res: Root = await axiosWrapper.get(url);
+
+                if ((res as unknown as { status: number }).status?.toString()[0] !== "2") {
+                    this.error = res.message || "Gagal mengambil data faculty";
+                    return;
+                }
+
+                this.allFaculties = res.data.items;
+            } catch (error) {
+                console.error("Failed to fetch all faculties:", error);
+                this.error = extractErrorMessage(error, "Terjadi kesalahan saat mengambil data faculty");
+            } finally {
+                this.loading = false;
+            }
+        },
+        async getFacultyById(facultyId: number | string): Promise<Faculty | null> {
+            this.loading = true;
+            this.error = null;
+
+            try {
+                const url = `${baseUrl}/admin-university/master/faculties/${facultyId}`;
+                const res: FacultyDetailRoot = await axiosWrapper.get(url);
+
+                if ((res as unknown as { status: number }).status?.toString()[0] !== "2") {
+                    this.error = res.message || "Gagal mengambil data faculty";
+                    return null;
+                }
+
+                return res.data;
+            } catch (error) {
+                console.error("Failed to fetch faculty:", error);
+                this.error = extractErrorMessage(error, "Terjadi kesalahan saat mengambil data faculty");
+                return null;
             } finally {
                 this.loading = false;
             }
@@ -90,7 +143,51 @@ export const useFacultystore = defineStore("faculty", {
                 return true;
             } catch (error) {
                 console.error("Failed to create faculty:", error);
-                this.error = "Terjadi kesalahan saat menambahkan faculty";
+                this.error = extractErrorMessage(error, "Terjadi kesalahan saat menambahkan faculty");
+                return false;
+            } finally {
+                this.loading = false;
+            }
+        },
+        async updateFaculty(facultyId: number | string, payload: CreateFacultyPayload): Promise<boolean> {
+            this.loading = true;
+            this.error = null;
+
+            try {
+                const url = `${baseUrl}/admin-university/master/faculties/${facultyId}`;
+                const res: Root = await axiosWrapper.put(url, payload);
+
+                if ((res as unknown as { status: number }).status?.toString()[0] !== "2") {
+                    this.error = res.message || "Gagal memperbarui faculty";
+                    return false;
+                }
+
+                return true;
+            } catch (error) {
+                console.error("Failed to update faculty:", error);
+                this.error = extractErrorMessage(error, "Terjadi kesalahan saat memperbarui faculty");
+                return false;
+            } finally {
+                this.loading = false;
+            }
+        },
+        async deleteFaculty(facultyId: number | string, payload: CreateFacultyPayload): Promise<boolean> {
+            this.loading = true;
+            this.error = null;
+
+            try {
+                const url = `${baseUrl}/admin-university/master/faculties/${facultyId}`;
+                const res: Root = await axiosWrapper.delete(url, payload);
+
+                if ((res as unknown as { status: number }).status?.toString()[0] !== "2") {
+                    this.error = res.message || "Gagal menghapus faculty";
+                    return false;
+                }
+
+                return true;
+            } catch (error) {
+                console.error("Failed to delete faculty:", error);
+                this.error = extractErrorMessage(error, "Terjadi kesalahan saat menghapus faculty");
                 return false;
             } finally {
                 this.loading = false;

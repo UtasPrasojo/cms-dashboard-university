@@ -21,6 +21,23 @@ export interface Item {
   major_count: number
 }
 
+export interface Major {
+  id: string
+  name: string
+}
+
+export interface Faculty {
+  id: string
+  name: string
+  majors: Major[]
+}
+
+export interface FacultyDetailRoot {
+  data: Faculty
+  message: string
+  error: unknown
+}
+
 export interface FacultyFilter {
   page: number
   size: number
@@ -44,6 +61,7 @@ export interface CreateFacultyPayload {
 
 export interface FacultyState {
   faculties: Item[]
+  allFaculties: Item[]
   filter: FacultyFilter
   loading: boolean
   error: string | null

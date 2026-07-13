@@ -46,7 +46,7 @@
 
           <button
             v-else
-            v-for="item in facultyStore.faculties"
+            v-for="item in facultyStore.allFaculties"
             :key="item.id"
             type="button"
             class="w-full text-left px-4 py-2 text-xs md:text-sm hover:bg-base-section"
@@ -112,7 +112,7 @@ const dropdownRef = ref<HTMLElement | null>(null)
 
 const selectedFacultyLabel = computed(() => {
   if (!selectedFaculty.value) return 'Semua Fakultas'
-  return facultyStore.faculties.find((item) => item.id === selectedFaculty.value)?.name ?? 'Semua Fakultas'
+  return facultyStore.allFaculties.find((item) => item.id === selectedFaculty.value)?.name ?? 'Semua Fakultas'
 })
 
 function toggleDropdown() {
@@ -132,7 +132,7 @@ function handleClickOutside(event: MouseEvent) {
 }
 
 onMounted(() => {
-  facultyStore.getFaculty({ page: 1, size: 100 })
+  facultyStore.getAllFaculties()
   document.addEventListener('click', handleClickOutside)
 })
 

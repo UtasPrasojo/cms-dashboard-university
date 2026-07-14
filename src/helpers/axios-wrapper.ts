@@ -7,6 +7,7 @@ import router from "@/router";
 import { useAuthStore } from "@/stores/auth.store";
 import { useHelperStore } from "@/stores/helper.store";
 import { useAlertStore, AlertType } from "@/stores/alert.store";
+import { useLocaleStore } from "@/stores/locale.store";
 
 axios.defaults.baseURL = import.meta.env.VITE_API_ASSESSMENT_URL;
 axios.defaults.timeout = 30000;
@@ -113,13 +114,18 @@ function request(method: HttpMethod): RequestFn {
 
 function authHeader(): Record<string, string> {
   const auth = useAuthStore();
+  const locale = useLocaleStore();
   const token = auth.user?.access_token;
 
-  if (!token) return {};
-
-  return {
-    Authorization: `Bearer ${token}`,
+  const headers: Record<string, string> = {
+    "x-header-language": locale.language,
   };
+
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
+
+  return headers;
 }
 
 // ❗ sekarang hanya untuk THROW

@@ -2,37 +2,25 @@
   <header class="w-full flex items-center gap-3 px-4 py-3">
     <div class="relative w-full max-w-xs">
       <i class="fi fi-rr-search absolute left-4 top-1/2 -translate-y-1/2 text-text-300 text-sm leading-none"></i>
-      <input
-        type="text"
-        placeholder="Cari di sini..."
-        class="w-full bg-base-white rounded-full pl-10 pr-4 py-2.5 text-sm text-text-500 placeholder:text-text-300 focus:outline-none focus:ring-1 focus:ring-primary-500 shadow-lg"
-      />
+      <input type="text" placeholder="Cari di sini..."
+        class="w-full bg-base-white rounded-full pl-10 pr-4 py-2.5 text-sm text-text-500 placeholder:text-text-300 focus:outline-none focus:ring-1 focus:ring-primary-500 shadow-lg" />
     </div>
 
     <div class="ml-auto flex items-center gap-3">
       <div class="relative" ref="dropdownRef">
-        <button
-          type="button"
+        <button type="button"
           class="flex items-center gap-2 bg-base-white rounded-full pl-4 pr-3 py-2.5 text-xs md:text-sm font-medium text-text-500 text-nowrap shadow-lg"
-          @click="toggleDropdown"
-        >
+          @click="toggleDropdown">
           {{ selectedFacultyLabel }}
-          <i
-            class="fi fi-rr-angle-small-down text-xs leading-none transition-transform"
-            :class="isOpen ? 'rotate-180' : ''"
-          ></i>
+          <i class="fi fi-rr-angle-small-down text-xs leading-none transition-transform"
+            :class="isOpen ? 'rotate-180' : ''"></i>
         </button>
 
-        <div
-          v-if="isOpen"
-          class="absolute right-0 mt-2 w-56 max-h-72 overflow-y-auto bg-base-white rounded-2xl shadow-xl py-2 z-30"
-        >
-          <button
-            type="button"
-            class="w-full text-left px-4 py-2 text-xs md:text-sm hover:bg-base-section"
+        <div v-if="isOpen"
+          class="absolute right-0 mt-2 w-56 max-h-72 overflow-y-auto bg-base-white rounded-2xl shadow-xl py-2 z-30">
+          <button type="button" class="w-full text-left px-4 py-2 text-xs md:text-sm hover:bg-base-section"
             :class="selectedFaculty === null ? 'text-primary-500 font-semibold' : 'text-text-500'"
-            @click="selectFaculty(null)"
-          >
+            @click="selectFaculty(null)">
             Semua Fakultas
           </button>
 
@@ -44,40 +32,33 @@
             {{ facultyStore.error }}
           </div>
 
-          <button
-            v-else
-            v-for="item in facultyStore.allFaculties"
-            :key="item.id"
-            type="button"
+          <button v-else v-for="item in facultyStore.allFaculties" :key="item.id" type="button"
             class="w-full text-left px-4 py-2 text-xs md:text-sm hover:bg-base-section"
             :class="selectedFaculty === item.id ? 'text-primary-500 font-semibold' : 'text-text-500'"
-            @click="selectFaculty(item.id)"
-          >
+            @click="selectFaculty(item.id)">
             {{ item.name }}
           </button>
         </div>
       </div>
 
-      <span
-        class="w-9 h-9 rounded-full bg-base-white grid place-items-center text-base leading-none shrink-0 shadow-lg"
-        title="Bahasa Indonesia"
-      >
-        <img src="@/assets/images/dashboard/indonesia-flag.png" class="w-[18px] h-[18px] object-contain" alt="">
-      </span>
+      <button type="button"
+        class="w-9 h-9 rounded-full bg-base-white grid place-items-center text-base leading-none shrink-0 shadow-lg overflow-hidden"
+        :title="language === 'id' ? 'Bahasa Indonesia' : 'English'" @click="toggleLanguage">
+        <Transition name="flag" mode="out-in">
+          <img :key="language" :src="language === 'id' ? indonesiaFlag : unitedKingdomFlag"
+            class="w-[18px] h-[18px] object-contain" alt="">
+        </Transition>
+      </button>
 
-      <button
-        type="button"
+      <button type="button"
         class="relative w-9 h-9 rounded-full bg-base-white grid place-items-center text-text-500 shrink-0 shadow-lg"
-        title="Notifikasi"
-      >
+        title="Notifikasi">
         <IconBell class="w-5 h-5" />
         <span class="absolute top-2 right-2 w-1.5 h-1.5 rounded-full bg-error-500"></span>
       </button>
 
-      <div
-        class="w-9 h-9 rounded-full bg-primary-500 grid place-items-center shrink-0 overflow-hidden shadow-lg"
-        :title="displayName"
-      >
+      <div class="w-9 h-9 rounded-full bg-primary-500 grid place-items-center shrink-0 overflow-hidden shadow-lg"
+        :title="displayName">
         <p class="text-xs font-semibold text-base-white">{{ initials }}</p>
       </div>
     </div>
@@ -88,6 +69,9 @@
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useAuthStore } from '@/stores/auth.store'
 import { useFacultystore } from '@/stores/university/faculty.store'
+import { useLocaleStore } from '@/stores/locale.store'
+import indonesiaFlag from '@/assets/images/dashboard/indonesia-flag.png'
+import unitedKingdomFlag from '@/assets/images/dashboard/united-kingdom.png'
 
 const emit = defineEmits<{
   'update:faculty': [facultyId: string | null]
@@ -95,6 +79,7 @@ const emit = defineEmits<{
 
 const authStore = useAuthStore()
 const facultyStore = useFacultystore()
+const localeStore = useLocaleStore()
 
 const displayName = computed(() => authStore.user?.admin?.name ?? 'User')
 
@@ -125,6 +110,12 @@ function selectFaculty(facultyId: string | null) {
   emit('update:faculty', facultyId)
 }
 
+const language = computed(() => localeStore.language)
+
+function toggleLanguage() {
+  localeStore.toggleLanguage()
+}
+
 function handleClickOutside(event: MouseEvent) {
   if (dropdownRef.value && !dropdownRef.value.contains(event.target as Node)) {
     isOpen.value = false
@@ -140,3 +131,19 @@ onUnmounted(() => {
   document.removeEventListener('click', handleClickOutside)
 })
 </script>
+<style scoped>
+.flag-enter-active,
+.flag-leave-active {
+  transition: all 0.25s ease;
+}
+
+.flag-enter-from {
+  opacity: 0;
+  transform: scale(0.5) rotate(-90deg);
+}
+
+.flag-leave-to {
+  opacity: 0;
+  transform: scale(0.5) rotate(90deg);
+}
+</style>

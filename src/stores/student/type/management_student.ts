@@ -34,6 +34,10 @@ export interface StudentFilter {
     search: string
     sortBy: string
     orderBy: string
+    facultyIds: string[]
+    majorIds: string[]
+    nineBoxPositions: string[]
+    archetypes: string[]
 }
 
 export interface GetStudentParams {
@@ -42,6 +46,20 @@ export interface GetStudentParams {
     search?: string
     sortBy?: string
     orderBy?: string
+    facultyIds?: string[]
+    majorIds?: string[]
+    nineBoxPositions?: string[]
+    archetypes?: string[]
+}
+
+export interface CreateStudentPayload {
+    name: string
+    gender: string
+    email: string
+    cohort: string
+    usi: string
+    faculty_id: string
+    major_id: string
 }
 
 export interface ManagementStudentState {

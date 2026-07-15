@@ -70,12 +70,14 @@ function request(method: HttpMethod): RequestFn {
 
     alertStore.network_status = true;
 
+    const isFormData = typeof FormData !== "undefined" && body instanceof FormData;
+
     const requestOptions: AxiosRequestConfig = {
       url: normalizeUrl(url),
       method,
       headers: {
         ...authHeader(),
-        ...(body ? { "Content-Type": contentType } : {}),
+        ...(body && !isFormData ? { "Content-Type": contentType } : {}),
       },
     };
 

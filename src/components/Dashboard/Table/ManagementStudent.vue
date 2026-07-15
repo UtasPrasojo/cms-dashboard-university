@@ -2,7 +2,7 @@
     <div class="w-full bg-base-white rounded-2xl p-6 custom-shadow">
         <TbTitle title="Daftar Mahasiswa" :store="managementStore" placeholder="Search here...">
             <template #center>
-                <button type="button"
+                <button type="button" @click="handleOpenFilter"
                     class="flex items-center gap-2 px-2 py-2 text-xs md:text-sm font-medium border border-border-300 rounded-3xl text-[#6E6E6E] hover:bg-base-section">
                     Filter
 
@@ -67,16 +67,36 @@
 
         <TbPaginate :filter="paginationFilter" empty_title="Belum ada data mahasiswa"
             empty_desc="Data mahasiswa yang ditambahkan akan muncul di sini" />
+
+        <ManagementStudentModalAddStudent v-model="showAddStudentModal" @saved="fetchStudents" />
+        <ManagementStudentModalImportStudent v-model="showImportStudentModal" @saved="fetchStudents" />
+        <ManagementStudentModalFilter v-model="showFilterModal" />
     </div>
 </template>
 
 <script setup>
-import { computed, onMounted, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useManagementStore } from '@/stores/student/management_student.store'
 import { useHelperStore } from '@/stores/helper.store'
 
 const managementStore = useManagementStore()
 const helperStore = useHelperStore()
+
+const showAddStudentModal = ref(false)
+const showImportStudentModal = ref(false)
+const showFilterModal = ref(false)
+
+const handleAddStudent = () => {
+    showAddStudentModal.value = true
+}
+
+const handleOpenFilter = () => {
+    showFilterModal.value = true
+}
+
+const handleImportStudent = () => {
+    showImportStudentModal.value = true
+}
 
 const paginationFilter = computed(() => ({
     get page() { return managementStore.filter.page },
@@ -93,6 +113,10 @@ const fetchParams = computed(() => ({
     search: managementStore.filter.search,
     sortBy: managementStore.filter.sortBy,
     orderBy: managementStore.filter.orderBy,
+    facultyIds: managementStore.filter.facultyIds,
+    majorIds: managementStore.filter.majorIds,
+    nineBoxPositions: managementStore.filter.nineBoxPositions,
+    archetypes: managementStore.filter.archetypes,
 }))
 
 const fetchStudents = async () => {

@@ -83,6 +83,27 @@ export const useMajorstore = defineStore("major", {
                 this.loading = false;
             }
         },
+        async getAllMajors(): Promise<void> {
+            this.loading = true;
+            this.error = null;
+
+            try {
+                const url = `${baseUrl}/admin-university/master/majors?page=1&size=100`;
+                const res: MajorResponseSchema = await axiosWrapper.get(url);
+
+                if ((res as unknown as { status: number }).status?.toString()[0] !== "2") {
+                    this.error = res.message || "Gagal mengambil data program studi";
+                    return;
+                }
+
+                this.allMajors = res.data.items;
+            } catch (error) {
+                console.error("Failed to fetch all majors:", error);
+                this.error = extractErrorMessage(error, "Terjadi kesalahan saat mengambil data program studi");
+            } finally {
+                this.loading = false;
+            }
+        },
         async getMajorById(majorId: number | string): Promise<Major | null> {
             this.loading = true;
             this.error = null;

@@ -2,14 +2,18 @@
     <div class="w-full bg-base-white rounded-2xl p-6 custom-shadow">
         <TbTitle title="Daftar Mahasiswa" :store="managementStore" placeholder="Search here...">
             <template #center>
-                <button type="button" @click="handleOpenFilter"
-                    class="flex items-center gap-2 px-2 py-2 text-xs md:text-sm font-medium border border-border-300 rounded-3xl text-[#6E6E6E] hover:bg-base-section">
-                    Filter
+                <div class="relative">
+                    <button type="button" @click="handleOpenFilter"
+                        class="flex items-center gap-2 px-2 py-2 text-xs md:text-sm font-medium border border-border-300 rounded-3xl text-[#6E6E6E] hover:bg-base-section">
+                        Filter
 
-                    <div class="flex justify-center items-center w-6 h-6 rounded-full bg-base-dark">
-                        <i class="fi fi-rr-settings-sliders text-white text-xs !leading-none mt-0.5"></i>
-                    </div>
-                </button>
+                        <div class="flex justify-center items-center w-6 h-6 rounded-full bg-base-dark">
+                            <i class="fi fi-rr-settings-sliders text-white text-xs !leading-none mt-0.5"></i>
+                        </div>
+                    </button>
+
+                    <ManagementStudentModalFilter v-model="showFilterModal" />
+                </div>
             </template>
 
             <ButtonSelectOption label="Tambah Mahasiswa">
@@ -70,7 +74,6 @@
 
         <ManagementStudentModalAddStudent v-model="showAddStudentModal" @saved="fetchStudents" />
         <ManagementStudentModalImportStudent v-model="showImportStudentModal" @saved="fetchStudents" />
-        <ManagementStudentModalFilter v-model="showFilterModal" />
     </div>
 </template>
 

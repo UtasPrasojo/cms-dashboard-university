@@ -44,7 +44,8 @@
 
                     <TbData align="center">
                         <div class="flex items-center justify-center">
-                            <TbActionIcon icon="fi fi-rr-eye" title="Lihat Detail" type="netral" />
+                            <TbActionIcon icon="fi fi-rr-eye" title="Lihat Detail" type="netral"
+                                @click="openApprovalModal(item)" />
                         </div>
                     </TbData>
                 </TbRow>
@@ -53,11 +54,13 @@
 
         <TbPaginate :filter="paginationFilter" empty_title="Belum ada pengajuan referral"
             empty_desc="Pengajuan referral mahasiswa akan muncul di sini" />
+
+        <ManagementStudentModalApproval v-model="showApprovalModal" :student="selectedReferral" />
     </div>
 </template>
 
 <script setup>
-import { computed, reactive } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import { approvalReferrals } from '@/data/approvalReferralMock'
 
 const filter = reactive({
@@ -69,6 +72,14 @@ const filter = reactive({
 })
 
 const store = { filter }
+
+const showApprovalModal = ref(false)
+const selectedReferral = ref(null)
+
+const openApprovalModal = (item) => {
+    selectedReferral.value = item
+    showApprovalModal.value = true
+}
 
 const filteredReferrals = computed(() => {
     const keyword = filter.search.trim().toLowerCase()

@@ -1,16 +1,22 @@
 <template>
-  <div class="flex w-full mb-4">
+  <div class="inline-flex items-center gap-2 w-fit rounded-full  p-1.5 ">
     <button
       v-for="tab in menu"
       @click="tabEvent(tab.value)"
       :key="tab.value"
+      type="button"
       class="switch"
-      :class="(modelValue == tab.value || route.query.tab == tab.value) ? 'switch-on' : 'switch-off'"
+      :class="isActive(tab.value) ? 'switch-on' : 'switch-off'"
     >
       {{ tab.label }}
-      <PartialBadgeBasic v-if="tab?.count" :label="tab.count" />
+      <span
+        v-if="tab?.count"
+        class="flex items-center justify-center min-w-[24px] h-6 px-1.5 rounded-full text-xs font-semibold"
+        :class="isActive(tab.value) ? 'bg-base-white text-primary-500' : 'bg-base-section text-text-400'"
+      >
+        {{ tab.count }}
+      </span>
     </button>
-    <div class="w-full border-b-2 border-[#F0F3FF]"></div>
   </div>
 </template>
 
@@ -51,6 +57,8 @@ const tabEvent = (value) => {
   }
 }
 
+const isActive = (value) => props.modelValue == value || route.query.tab == value
+
 onMounted(() => {
   if (!props.modelValue && !props.menu.map(tab => tab.value).includes(route.query.tab)) {
     router.push(`?tab=${props.menu[0]?.value}`)
@@ -61,12 +69,12 @@ onMounted(() => {
 
 <style scoped>
 .switch {
-  @apply flex-none px-3 py-2.5 text-xs md:text-sm
+  @apply flex-none flex gap-2 items-center px-5 py-2.5 text-xs md:text-sm rounded-full transition-colors
 }
 .switch-on {
-  @apply flex gap-1 items-center font-bold text-text-primary border-b-2 border-primary-500;
+  @apply font-semibold text-base-white bg-primary-500;
 }
 .switch-off {
-  @apply flex gap-1 items-center font-medium text-text-400 border-b border-border-200 hover:bg-gray-50;
+  @apply font-medium text-text-400 bg-base-white hover:bg-base-section;
 }
 </style>

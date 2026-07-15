@@ -1,5 +1,5 @@
 <template>
-    <PartialModal v-model="isOpen" title="Daftar Mahasiswa" centered max-width="480px" @close="resetForm">
+    <PartialModal v-model="isOpen" title="Daftar Mahasiswa"  max-width="480px" @close="resetForm">
         <div class="flex flex-col gap-4">
             <p class="text-sm text-text-400">Unggah file XLSX untuk melakukan proses import data.</p>
 

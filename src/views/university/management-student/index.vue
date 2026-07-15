@@ -12,8 +12,23 @@ CampusHealth<template>
         <div class="relative z-10 w-full flex flex-col gap-4 p-6">
          <h2 class="text-[21px]">Manajemen Mahasiswa</h2>
 
-         <DashboardTableManagementStudent />
+         <ButtonTab v-model="activeTab" :menu="tabMenu" />
+
+         <DashboardTableManagementStudent v-if="activeTab === 'students'" />
+         <DashboardTableApprovalReferral v-else />
         </div>
 
     </div>
 </template>
+
+<script setup>
+import { ref } from 'vue'
+import { approvalReferrals } from '@/data/approvalReferralMock'
+
+const activeTab = ref('students')
+
+const tabMenu = [
+    { label: 'Daftar Mahasiswa', value: 'students' },
+    { label: 'Approval Referral', value: 'referral', count: approvalReferrals.length },
+]
+</script>

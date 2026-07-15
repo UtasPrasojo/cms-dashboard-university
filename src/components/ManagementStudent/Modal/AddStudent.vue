@@ -1,5 +1,5 @@
 <template>
-    <PartialModal v-model="isOpen" title="Tambah Mahasiswa" centered max-width="480px" @close="resetForm">
+    <PartialModal v-model="isOpen" title="Tambah Mahasiswa"  max-width="480px" @close="resetForm">
         <form class="flex flex-col gap-4" @submit.prevent="handleSubmit">
             <InputText v-model="name" name="student_name" label="Nama Mahasiswa" placeholder="Masukkan nama mahasiswa"
                 required />

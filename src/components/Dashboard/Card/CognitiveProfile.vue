@@ -11,11 +11,11 @@
     </div>
 
     <!-- Summary -->
-    <div class="grid grid-cols-3 gap-4 mt-6">
+    <div class="flex flex-wrap gap-4 mt-6">
 
       <!-- IQ -->
       <div
-        class="border rounded-3xl p-6 flex justify-between items-center"
+        class="flex-1 min-w-[220px] border rounded-3xl p-6 flex justify-between items-center"
       >
         <div>
           <p class="text-[12px] font-medium">
@@ -39,13 +39,13 @@
 
       <!-- Highlight -->
       <div
-        class="col-span-2 border rounded-3xl p-6"
+        class="flex-[2] min-w-[260px] border rounded-3xl p-6"
       >
         <p class="text-[12px] font-medium">
           Aspek menonjol
         </p>
 
-        <div class="flex gap-8 mt-4">
+        <div class="flex flex-wrap gap-4 sm:gap-8 mt-4">
 
           <div
             v-for="item in highlights"
@@ -53,12 +53,12 @@
             class="flex items-center gap-3"
           >
             <div
-              class="w-[26px] h-[26px] rounded-full bg-violet-100 flex items-center justify-center text-primary-500 font-semibold text-[12px]"
+              class="w-[26px] h-[26px] rounded-full bg-violet-100 flex items-center justify-center text-primary-500 font-semibold text-[12px] shrink-0"
             >
               {{ item.rank }}
             </div>
 
-            <span class="text-[12px]">
+            <span class="text-[12px] whitespace-nowrap">
               {{ item.title }}
             </span>
 
@@ -71,7 +71,7 @@
 
     <!-- Bars -->
     <div
-      class="grid grid-cols-8 gap-6 mt-8"
+      class="flex flex-wrap justify-between gap-x-6 gap-y-6 mt-8"
     >
       <BarPilBar
         v-for="bar in bars"

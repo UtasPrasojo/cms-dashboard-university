@@ -2,7 +2,7 @@
   <TbData
     class="sticky left-0 z-[9] align-top after:absolute after:top-0 after:right-0 after:h-full after:w-px "
   >
-    <div class="flex flex-row gap-2 items-center relative">
+    <div class="flex flex-row gap-2 items-center relative bg-[#F9FBFE] px-1">
       <div
         :class="{
           'opacity-100 scale-100': statusTooltip,

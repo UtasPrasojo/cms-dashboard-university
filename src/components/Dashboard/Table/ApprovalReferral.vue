@@ -13,7 +13,7 @@
             </template>
         </TbTitle>
 
-        <TbMain :size="filter.size" :data="paginatedReferrals">
+        <TbMain :size="filter.size" :data="paginatedReferrals" table-overflow>
             <thead>
                 <TbRow type="head">
                     <TbHead>No</TbHead>

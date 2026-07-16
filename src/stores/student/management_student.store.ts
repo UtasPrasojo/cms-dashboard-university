@@ -60,12 +60,30 @@ export const useManagementStore = defineStore("management_student", {
                 if (params.search) query.search = params.search;
                 if (params.sortBy) query.sortBy = params.sortBy;
                 if (params.orderBy) query.orderBy = params.orderBy;
-                if (params.facultyIds?.length) query.faculty_id = params.facultyIds.join(",");
-                if (params.majorIds?.length) query.major_id = params.majorIds.join(",");
-                if (params.nineBoxPositions?.length) query.nine_box_position = params.nineBoxPositions.join(",");
-                if (params.archetypes?.length) query.archetype = params.archetypes.join(",");
 
-                const queryString = new URLSearchParams(query).toString();
+                const queryParts = Object.entries(query).map(
+                    ([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
+                );
+
+                // Multi-select filters: each value is encoded individually, but joined
+                // with a literal "," (not "%2C") since the backend expects a plain
+                // comma-separated list, e.g. faculty_ids=abc,def or ninebox_matrix=2:2,0:1.
+                const pushListParam = (key: string, values?: string[]) => {
+                    if (!values?.length) return;
+                    queryParts.push(`${key}=${values.map((value) => encodeURIComponent(value)).join(",")}`);
+                };
+
+                pushListParam("faculty_ids", params.facultyIds);
+                pushListParam("major_ids", params.majorIds);
+                pushListParam("archetype", params.archetypes);
+
+                // ninebox_matrix values are "row:col" pairs — encodeURIComponent would
+                // turn ":" into "%3A", so this one is appended fully unencoded.
+                if (params.nineBoxPositions?.length) {
+                    queryParts.push(`ninebox_matrix=${params.nineBoxPositions.join(",")}`);
+                }
+
+                const queryString = queryParts.join("&");
                 const url = queryString
                     ? `${baseUrl}/admin-university/student?${queryString}`
                     : `${baseUrl}/admin-university/student`;

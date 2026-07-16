@@ -9,9 +9,9 @@
         </div>
 
         <!-- Content Layer -->
-        <div class="relative z-10 w-full flex">
-            <div class="w-3/4 flex flex-col p-4">
-                <div class="flex gap-4 mb-4">
+        <div class="relative z-10 w-full flex flex-col lg:flex-row">
+            <div class="w-full lg:w-3/4 flex flex-col p-4">
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
                     <DashboardCardInformation v-for="(card, index) in cards" :key="index" :title="card.title"
                         :value="card.value" :description="card.description" :icon="card.icon" />
                 </div>
@@ -19,7 +19,7 @@
                 <DashboardCardArchetypePersonality :data="dashboardStore.archetypePersonality" />
             </div>
 
-            <div class="w-1/4 pb-4 flex flex-col">
+            <div class="w-full lg:w-1/4 pb-4 flex flex-col">
                 <DashboardCardCampusReferal :title="referral.title" :code="dashboardStore.referralCode?.code ?? ''"
                     :description="referral.description" />
                 <DashboardCardFindIndustry title="Industri Paling Aktif Mencari" :industries="industries" />
@@ -28,7 +28,7 @@
             </div>
         </div>
         <div class="relative z-10 w-full flex">
-            <div class="w-full grid grid-cols-2 gap-4 px-4">
+            <div class="w-full grid grid-cols-1 lg:grid-cols-2 gap-4 px-4">
                 <DashboardCardCognitiveProfile :summary="cognitiveSummary" :highlights="highlightAspects"
                     :bars="cognitiveBars" />
                 <DashboardCardCareerRead :score="careerReadiness.score" :status="careerReadiness.status"

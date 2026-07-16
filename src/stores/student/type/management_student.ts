@@ -1,3 +1,13 @@
+export interface StudentArchetype {
+    archetype_id: string
+    name: string
+    description: string
+    distance: number
+    code: string
+    matchPercentage: number
+    rank: number
+}
+
 export interface StudentItem {
     id: string
     name: string
@@ -7,6 +17,8 @@ export interface StudentItem {
     education_level: string
     faculty: string
     major: string
+    archetype: StudentArchetype[] | null
+    ninebox: [number, number] | null
 }
 
 export interface Pagination {

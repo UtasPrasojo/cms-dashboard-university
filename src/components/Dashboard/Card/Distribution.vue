@@ -5,7 +5,7 @@
       <InformationCircleIcon class="w-5 h-5 text-primary-900" />
     </div>
 
-    <TbMain :size="paginationFilter.size" :data="data">
+    <TbMain :size="paginationFilter.size" :data="data" table-overflow>
       <thead>
         <TbRow type="head">
           <TbHead>Program Studi</TbHead>

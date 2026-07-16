@@ -9,7 +9,7 @@
       <slot name="title-right" />
       <PartialBadgeBasic v-if="badge !== false && badge !== null && badge !== undefined" :label='`${badge ?? "0"}`' />
     </div>
-    <div class="flex items-center gap-3">
+    <div class="flex flex-wrap items-center gap-3">
       <slot name="left" />
       <InputDropdown variant="filter" class="min-w-[80px]" v-if="!hide_size" :label="null" name="size" id="size"
         :options="sizeList.map(size => ({ label: size == 1000000000 ? 'All' : size, value: size }))"
@@ -18,13 +18,13 @@
       <InputDropdownV2 class="min-w-[160px]" with_search v-if="with_division" :label="null" name="division"
         placeholder="Global" v-model="store[filterKey].division_id" />
       <div v-if="searchable"
-        class="flex items-center gap-2 rounded-3xl border border-border-300 bg-surface-primary px-3 py-2 focus-within:border-primary-500 focus-within:bg-primary-50">
+        class="flex items-center gap-2 rounded-3xl border border-border-300 bg-surface-primary px-3 py-2 focus-within:border-primary-500 focus-within:bg-primary-50 flex-1 min-w-[160px] sm:flex-initial sm:w-[220px]">
         <div class="flex items-center justify-center w-6 h-6 rounded-full bg-base-dark shrink-0">
           <i class="fi fi-rr-search flex items-center justify-center text-white text-xs leading-none"></i>
         </div>
 
         <input @keyup="res => updateSearch(res)" :value="store[filterKey].search" @keydown.enter.prevent=""
-          class="w-full bg-transparent text-xs md:text-sm text-base-black placeholder:text-text-400 focus:outline-none"
+          class="w-full min-w-0 bg-transparent text-xs md:text-sm text-base-black placeholder:text-text-400 focus:outline-none"
           name="table-search" id="table-search" :placeholder="placeholder" />
       </div>
       <slot />

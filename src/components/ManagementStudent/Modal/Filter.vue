@@ -21,7 +21,7 @@
 
                     <div v-else class="grid grid-cols-2 gap-x-4 gap-y-3">
                         <label v-for="option in group.options" :key="option.value"
-                            class="flex items-center gap-2 text-sm text-text-400 cursor-pointer">
+                            class="flex items-center gap-2 text-[14px] text-[#27272A] cursor-pointer">
                             <InputCheckbox :value="group.selected.value.includes(option.value)"
                                 @update="toggleOption(group.selected, option.value)" />
                             {{ option.label }}
@@ -49,7 +49,6 @@ import { computed, ref, watch } from 'vue'
 import { useManagementStore } from '@/stores/student/management_student.store'
 import { useFacultystore } from '@/stores/university/faculty.store'
 import { useMajorstore } from '@/stores/university/major.store'
-import { useDashboardStore } from '@/stores/university/dashboard.store'
 
 const props = defineProps({
     modelValue: { type: Boolean, default: false },
@@ -60,23 +59,27 @@ const emit = defineEmits(['update:modelValue'])
 const managementStore = useManagementStore()
 const facultyStore = useFacultystore()
 const majorStore = useMajorstore()
-const dashboardStore = useDashboardStore()
 
 const isOpen = computed({
     get: () => props.modelValue,
     set: (value) => emit('update:modelValue', value),
 })
 
+// Each label maps to one or more "row:col" cells of the 3x3 nine-box grid
+// (row = IQ tinggi/sedang/rendah, col = IPK rendah/sedang/tinggi — same axes
+// as getNineBoxMeta in ManagementStudent.vue). Cell 0:2 (IQ rendah, IPK
+// tinggi) has no dedicated label in the design, so it's folded into
+// "Tekun & Konsisten".
 const nineBoxPositionOptions = [
-    'Talent Unggulan',
-    'Profil Solid',
-    'Bintang Berkembang',
-    'Perlu Pendampingan',
-    'Bakat Terpendam',
-    'Tekun & Konsisten',
-    'Pekerja Keras Berprestasi',
-    'Perlu Dorongan',
-].map((label) => ({ value: label, label }))
+    { label: 'Talent Unggulan', coords: ['2:2'] },
+    { label: 'Profil Solid', coords: ['1:1'] },
+    { label: 'Bintang Berkembang', coords: ['2:1'] },
+    { label: 'Perlu Pendampingan', coords: ['1:0'] },
+    { label: 'Bakat Terpendam', coords: ['2:0'] },
+    { label: 'Tekun & Konsisten', coords: ['0:1', '0:2'] },
+    { label: 'Pekerja Keras Berprestasi', coords: ['1:2'] },
+    { label: 'Perlu Dorongan', coords: ['0:0'] },
+].map((item) => ({ value: item.coords.join(','), label: item.label }))
 
 const selectedFacultyIds = ref([])
 const selectedMajorIds = ref([])
@@ -91,15 +94,25 @@ const majorOptions = computed(() =>
     majorStore.allMajors.map((major) => ({ value: major.id, label: major.major }))
 )
 
-const archetypeOptions = computed(() =>
-    (dashboardStore.archetypePersonality ?? []).map((archetype) => ({ value: archetype.code, label: archetype.name }))
-)
+// Codes match `archetype[].code` returned per student by
+// GET /admin-university/student (see PartialArchetypeIcon's imageByCode).
+// Names confirmed against that same student response's code<->name pairing.
+const archetypeOptions = [
+    { value: 'wolf', label: 'Pathfinder' },
+    { value: 'cow', label: 'Stabilizer' },
+    { value: 'dolphin', label: 'Collaborator' },
+    { value: 'ant', label: 'Organizer' },
+    { value: 'owl', label: 'Strategist' },
+    { value: 'lynx', label: 'Independent Thinker' },
+    { value: 'cheetah', label: 'Executor' },
+    { value: 'fox', label: 'Adaptive Innovator' },
+]
 
 const groups = computed(() => [
     { key: 'faculty', title: 'Fakultas', options: facultyOptions.value, selected: selectedFacultyIds },
     { key: 'major', title: 'Program Studi', options: majorOptions.value, selected: selectedMajorIds },
     { key: 'ninebox', title: 'Posisi 9 Box', options: nineBoxPositionOptions, selected: selectedNineBoxPositions },
-    { key: 'archetype', title: 'Archetype', options: archetypeOptions.value, selected: selectedArchetypes },
+    { key: 'archetype', title: 'Archetype', options: archetypeOptions, selected: selectedArchetypes },
 ])
 
 const toggleOption = (selected, value) => {
@@ -137,7 +150,6 @@ watch(() => props.modelValue, (open) => {
     syncFromStore()
     if (!facultyStore.allFaculties.length) facultyStore.getAllFaculties()
     if (!majorStore.allMajors.length) majorStore.getAllMajors()
-    if (!dashboardStore.archetypePersonality) dashboardStore.getArchetypePersonality()
 })
 </script>
 

@@ -1,14 +1,15 @@
-import { z } from "@/utils/validate";
+// src/stores/university/type/referral_code.ts
+import { z } from "zod";
 
 export const referralCodeSchema = z.object({
-  id: z.string(),
-  code: z.string(),
+    id: z.number(),
+    code: z.string(),
 });
 
 export const referralCodeResponseSchema = z.object({
-  data: referralCodeSchema,
-  message: z.string(),
-  error: z.string().nullable(),
+    data: referralCodeSchema,
+    message: z.string(),
+    error: z.unknown().nullable(),
 });
 
 export type ReferralCode = z.infer<typeof referralCodeSchema>;

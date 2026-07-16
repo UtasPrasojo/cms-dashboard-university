@@ -88,7 +88,7 @@ export const useMajorstore = defineStore("major", {
             this.error = null;
 
             try {
-                const url = `${baseUrl}/admin-university/master/majors?page=1&size=100`;
+                const url = `${baseUrl}/admin-university/master/majors?page=1&size=50`;
                 const res: MajorResponseSchema = await axiosWrapper.get(url);
 
                 if ((res as unknown as { status: number }).status?.toString()[0] !== "2") {

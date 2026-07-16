@@ -11,7 +11,7 @@
     </div>
 
     <!-- Top Section -->
-    <div class="flex gap-10 items-center">
+    <div class="flex flex-wrap gap-10 items-center">
 
       <!-- Circle -->
       <div class="relative w-[280px] h-[280px] shrink-0">
@@ -42,7 +42,7 @@
       </div>
 
       <!-- Description -->
-      <div class="flex-1">
+      <div class="flex-1 min-w-[220px]">
 
         <h3 class="text-[18px] font-medium text-primary-900">
           {{ status }}

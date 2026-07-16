@@ -33,7 +33,7 @@
             </ButtonSelectOption>
         </TbTitle>
 
-        <TbMain :size="managementStore.filter.size" :data="managementStore.students">
+        <TbMain :size="managementStore.filter.size" :data="managementStore.students" table-overflow>
             <thead>
                 <TbRow type="head">
                     <TbHead>No</TbHead>
@@ -42,6 +42,7 @@
                     <TbHead>Fakultas</TbHead>
                     <TbHead>Program Studi</TbHead>
                     <TbHead align="center">Posisi 9 Box</TbHead>
+                    <TbHead>Archetype</TbHead>
                     <TbHead align="center">Aksi</TbHead>
                 </TbRow>
             </thead>
@@ -60,7 +61,26 @@
 
                     <TbData>{{ student.major }}</TbData>
 
-                    <TbData align="center">-</TbData>
+                    <TbData align="center">
+                        <span v-if="getNineBoxMeta(student.ninebox)"
+                            class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium text-base-white"
+                            :class="getNineBoxMeta(student.ninebox).pill">
+                            <span class="w-1.5 h-1.5 rounded-full bg-base-white/80"></span>
+                            {{ getNineBoxMeta(student.ninebox).title }}
+                        </span>
+                        <span v-else class="text-text-300">-</span>
+                    </TbData>
+
+                    <TbData>
+                        <div v-if="getTopArchetypes(student.archetype).length" class="flex items-center gap-1.5">
+                            <div v-for="item in getTopArchetypes(student.archetype)" :key="item.archetype_id"
+                                :title="`${item.name} (${item.code}) • ${item.matchPercentage}%`"
+                                class="w-6 h-6 shrink-0 rounded-full bg-base-white border-2 border-base-white shadow-sm overflow-hidden flex items-center justify-center">
+                                <PartialArchetypeIcon :variant="item.code" :label="item.name" size="medium" class="!w-full !h-full object-cover" />
+                            </div>
+                        </div>
+                        <span v-else class="text-text-300">-</span>
+                    </TbData>
 
                     <TbData align="center">
                         <TbActionIcon icon="fi fi-rr-eye" title="Lihat Detail" type="netral" />
@@ -99,6 +119,51 @@ const handleOpenFilter = () => {
 
 const handleImportStudent = () => {
     showImportStudentModal.value = true
+}
+
+
+const nineBoxMatrixMeta = [
+    [
+        { title: 'Potensi Tersembunyi', variant: 'orange' },
+        { title: 'Bintang Berkembang', variant: 'blue' },
+        { title: 'Talent Unggulan', variant: 'green' },
+    ],
+    [
+        { title: 'Potensi Tersembunyi', variant: 'default' },
+        { title: 'Potensi Tersembunyi', variant: 'default' },
+        { title: 'Potensi Tersembunyi', variant: 'purple' },
+    ],
+    [
+        { title: 'Prioritas Intervensi', variant: 'red' },
+        { title: 'Potensi Tersembunyi', variant: 'default' },
+        { title: 'Potensi Tersembunyi', variant: 'default' },
+    ],
+]
+
+const nineBoxVariantPill = {
+    orange: 'bg-orange-400',
+    blue: 'bg-blue-600',
+    green: 'bg-teal-500',
+    purple: 'bg-violet-500',
+    red: 'bg-red-500',
+    default: 'bg-gray-400',
+}
+
+const getNineBoxMeta = (ninebox) => {
+    if (!Array.isArray(ninebox) || ninebox.length < 2) return null
+
+    const [row, col] = ninebox
+    const meta = nineBoxMatrixMeta[row]?.[col]
+
+    if (!meta) return null
+
+    return { ...meta, pill: nineBoxVariantPill[meta.variant] }
+}
+
+const getTopArchetypes = (archetype) => {
+    if (!Array.isArray(archetype)) return []
+
+    return [...archetype].sort((a, b) => a.rank - b.rank).slice(0, 3)
 }
 
 const paginationFilter = computed(() => ({

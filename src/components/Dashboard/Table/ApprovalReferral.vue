@@ -1,6 +1,6 @@
 <template>
     <div class="w-full bg-base-white rounded-2xl p-6 custom-shadow">
-        <TbTitle title="Approval Referral" :store="store" placeholder="Cari disini...">
+        <TbTitle title="Approval Referral" :store="approvalStore" placeholder="Cari disini...">
             <template #center>
                 <button type="button"
                     class="flex items-center gap-2 px-2 py-2 text-xs md:text-sm font-medium border border-border-300 rounded-3xl text-[#6E6E6E] hover:bg-base-section">
@@ -13,7 +13,7 @@
             </template>
         </TbTitle>
 
-        <TbMain :size="filter.size" :data="paginatedReferrals" table-overflow>
+        <TbMain :size="approvalStore.filter.size" :data="approvalStore.approvals" table-overflow>
             <thead>
                 <TbRow type="head">
                     <TbHead>No</TbHead>
@@ -26,8 +26,8 @@
                 </TbRow>
             </thead>
             <tbody>
-                <TbRow v-for="(item, index) in paginatedReferrals" :key="item.id">
-                    <TbData>{{ (filter.page - 1) * filter.size + index + 1 }}</TbData>
+                <TbRow v-for="(item, index) in approvalStore.approvals" :key="item.id">
+                    <TbData>{{ (approvalStore.filter.page - 1) * approvalStore.filter.size + index + 1 }}</TbData>
 
                     <TbData>{{ item.name }}</TbData>
 
@@ -60,18 +60,12 @@
 </template>
 
 <script setup>
-import { computed, reactive, ref } from 'vue'
-import { approvalReferrals } from '@/data/approvalReferralMock'
+import { computed, onMounted, ref, watch } from 'vue'
+import { useApprovalStore } from '@/stores/student/approval.store'
+import { useHelperStore } from '@/stores/helper.store'
 
-const filter = reactive({
-    page: 1,
-    size: 10,
-    search: '',
-    sortBy: '',
-    orderBy: '',
-})
-
-const store = { filter }
+const approvalStore = useApprovalStore()
+const helperStore = useHelperStore()
 
 const showApprovalModal = ref(false)
 const selectedReferral = ref(null)
@@ -81,37 +75,29 @@ const openApprovalModal = (item) => {
     showApprovalModal.value = true
 }
 
-const filteredReferrals = computed(() => {
-    const keyword = filter.search.trim().toLowerCase()
-    if (!keyword) return approvalReferrals
-
-    return approvalReferrals.filter(item =>
-        item.name.toLowerCase().includes(keyword) ||
-        item.email.toLowerCase().includes(keyword) ||
-        item.usi.toLowerCase().includes(keyword)
-    )
-})
-
-const total = computed(() => filteredReferrals.value.length)
-const totalPage = computed(() => (filter.size > 0 ? Math.ceil(total.value / filter.size) : 0))
-
-const pageIndex = computed(() => ({
-    first: total.value === 0 ? 0 : (filter.page - 1) * filter.size + 1,
-    last: Math.min(filter.page * filter.size, total.value),
-    total: total.value,
-}))
-
-const paginatedReferrals = computed(() => {
-    const start = (filter.page - 1) * filter.size
-    return filteredReferrals.value.slice(start, start + filter.size)
-})
-
 const paginationFilter = computed(() => ({
-    get page() { return filter.page },
-    set page(value) { filter.page = value },
-    get size() { return filter.size },
-    set size(value) { filter.size = value },
-    total_page: totalPage.value,
-    page_index: pageIndex.value,
+    get page() { return approvalStore.filter.page },
+    set page(value) { approvalStore.filter.page = value },
+    get size() { return approvalStore.filter.size },
+    set size(value) { approvalStore.filter.size = value },
+    total_page: approvalStore.totalPage,
+    page_index: approvalStore.pageIndex,
 }))
+
+const fetchParams = computed(() => ({
+    page: approvalStore.filter.page,
+    size: approvalStore.filter.size,
+    search: approvalStore.filter.search,
+    sortBy: approvalStore.filter.sortBy,
+    orderBy: approvalStore.filter.orderBy,
+}))
+
+const fetchApprovals = async () => {
+    helperStore.activate()
+    await approvalStore.getApprovals(fetchParams.value)
+    helperStore.deactivate()
+}
+
+onMounted(fetchApprovals)
+watch(fetchParams, fetchApprovals)
 </script>

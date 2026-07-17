@@ -22,13 +22,19 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { approvalReferrals } from '@/data/approvalReferralMock'
+import { computed, onMounted, ref } from 'vue'
+import { useApprovalStore } from '@/stores/student/approval.store'
+
+const approvalStore = useApprovalStore()
 
 const activeTab = ref('students')
 
-const tabMenu = [
+const tabMenu = computed(() => [
     { label: 'Daftar Mahasiswa', value: 'students' },
-    { label: 'Approval Referral', value: 'referral', count: approvalReferrals.length },
-]
+    { label: 'Approval Referral', value: 'referral', count: approvalStore.filter.total },
+])
+
+onMounted(() => {
+    approvalStore.getApprovals()
+})
 </script>

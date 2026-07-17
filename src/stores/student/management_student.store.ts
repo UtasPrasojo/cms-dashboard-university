@@ -66,10 +66,6 @@ export const useManagementStore = defineStore("management_student", {
                 const queryParts = Object.entries(query).map(
                     ([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
                 );
-
-                // Multi-select filters: each value is encoded individually, but joined
-                // with a literal "," (not "%2C") since the backend expects a plain
-                // comma-separated list, e.g. faculty_ids=abc,def or ninebox_matrix=2:2,0:1.
                 const pushListParam = (key: string, values?: string[]) => {
                     if (!values?.length) return;
                     queryParts.push(`${key}=${values.map((value) => encodeURIComponent(value)).join(",")}`);
@@ -79,8 +75,6 @@ export const useManagementStore = defineStore("management_student", {
                 pushListParam("major_ids", params.majorIds);
                 pushListParam("archetype", params.archetypes);
 
-                // ninebox_matrix values are "row:col" pairs — encodeURIComponent would
-                // turn ":" into "%3A", so this one is appended fully unencoded.
                 if (params.nineBoxPositions?.length) {
                     queryParts.push(`ninebox_matrix=${params.nineBoxPositions.join(",")}`);
                 }
@@ -137,11 +131,8 @@ export const useManagementStore = defineStore("management_student", {
             this.error = null;
 
             try {
-                const formData = new FormData();
-                formData.append("file", file);
-
                 const url = `${baseUrl}/admin-university/student/csv-import`;
-                const res = await axiosWrapper.post(url, formData);
+                const res = await axiosWrapper.post(url, file, false, "application/octet-stream");
 
                 const result = validate(importStudentResponseSchema, res);
                 if (!result.success) {

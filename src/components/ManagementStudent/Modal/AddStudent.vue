@@ -46,6 +46,19 @@ import { computed, ref, watch } from 'vue'
 import { useManagementStore } from '@/stores/student/management_student.store'
 import { useFacultystore } from '@/stores/university/faculty.store'
 import { useToastStore } from '@/stores/toast.store'
+import { useHelperStore } from '@/stores/helper.store'
+import { createStudentSchema } from '@/stores/student/type/management_student'
+import { validate } from '@/utils/validate'
+
+// Maps a zod field key to the InputText `name` prop so field-level errors
+// surface next to the matching input; fields without an InputText (radio /
+// select) fall back to a toast in handleSubmit.
+const FIELD_NAME_MAP = {
+    name: 'student_name',
+    email: 'student_email',
+    cohort: 'student_cohort',
+    usi: 'student_usi',
+}
 
 const props = defineProps({
     modelValue: { type: Boolean, default: false },
@@ -56,6 +69,7 @@ const emit = defineEmits(['update:modelValue', 'saved'])
 const managementStore = useManagementStore()
 const facultyStore = useFacultystore()
 const toastStore = useToastStore()
+const helperStore = useHelperStore()
 
 const isOpen = computed({
     get: () => props.modelValue,
@@ -98,6 +112,7 @@ const resetForm = () => {
     facultyId.value = null
     majorId.value = null
     majorOptions.value = []
+    helperStore.form_error = []
 }
 
 const loadMajorsForFaculty = async (id) => {
@@ -122,17 +137,30 @@ const handleMajorSaved = () => {
 const handleSubmit = async () => {
     if (!isFormValid.value) return
 
-    const payload = {
-        name: name.value.trim(),
+    const result = validate(createStudentSchema, {
+        name: name.value,
         gender: gender.value,
-        email: email.value.trim(),
-        cohort: cohort.value.trim(),
-        usi: usi.value.trim(),
+        email: email.value,
+        cohort: cohort.value,
+        usi: usi.value,
         faculty_id: facultyId.value,
         major_id: majorId.value,
+    })
+
+    if (!result.success) {
+        helperStore.form_error = Object.entries(result.errors).map(([field, message]) => ({
+            item_name: FIELD_NAME_MAP[field] ?? field,
+            message,
+        }))
+
+        const firstError = Object.values(result.errors)[0]
+        toastStore.display('error', 'Gagal', firstError ?? 'Periksa kembali data yang dimasukkan')
+        return
     }
 
-    const success = await managementStore.createStudent(payload)
+    helperStore.form_error = []
+
+    const success = await managementStore.createStudent(result.data)
 
     if (!success) {
         toastStore.display('error', 'Gagal', managementStore.error || 'Gagal menambahkan mahasiswa')

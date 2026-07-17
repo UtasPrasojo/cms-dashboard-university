@@ -1,5 +1,7 @@
 import { defineStore } from "pinia";
 import { axiosWrapper } from "@/helpers/axios-wrapper";
+import { validate } from "@/utils/validate";
+import { importStudentResponseSchema, csvTemplateResponseSchema } from "@/stores/student/type/management_student";
 import type {
     ManagementStudentState,
     GetStudentParams,
@@ -138,11 +140,18 @@ export const useManagementStore = defineStore("management_student", {
                 const formData = new FormData();
                 formData.append("file", file);
 
-                const url = `${baseUrl}/admin-university/student/import`;
-                const res: StudentListResponse = await axiosWrapper.post(url, formData);
+                const url = `${baseUrl}/admin-university/student/csv-import`;
+                const res = await axiosWrapper.post(url, formData);
 
-                if ((res as unknown as { status: number }).status?.toString()[0] !== "2") {
-                    this.error = res.message || "Gagal mengimpor data mahasiswa";
+                const result = validate(importStudentResponseSchema, res);
+                if (!result.success) {
+                    console.error("Invalid import student response:", result.errors);
+                    this.error = "Format respons import mahasiswa tidak valid";
+                    return false;
+                }
+
+                if (result.data.status.toString()[0] !== "2") {
+                    this.error = result.data.message || "Gagal mengimpor data mahasiswa";
                     return false;
                 }
 
@@ -150,6 +159,44 @@ export const useManagementStore = defineStore("management_student", {
             } catch (error) {
                 console.error("Failed to import students:", error);
                 this.error = extractErrorMessage(error, "Terjadi kesalahan saat mengimpor data mahasiswa");
+                return false;
+            } finally {
+                this.loading = false;
+            }
+        },
+
+        async downloadCsvTemplate(): Promise<boolean> {
+            this.loading = true;
+            this.error = null;
+
+            try {
+                const url = `${baseUrl}/admin-university/student/csv-template`;
+                const res = await axiosWrapper.get(url);
+
+                const result = validate(csvTemplateResponseSchema, res);
+                if (!result.success) {
+                    console.error("Invalid csv template response:", result.errors, res);
+                    this.error = "Format respons template tidak valid";
+                    return false;
+                }
+
+                const csv = typeof result.data === "string" ? result.data : result.data.data;
+
+                const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+                const objectUrl = URL.createObjectURL(blob);
+
+                const link = document.createElement("a");
+                link.href = objectUrl;
+                link.download = "template-mahasiswa.csv";
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
+                URL.revokeObjectURL(objectUrl);
+
+                return true;
+            } catch (error) {
+                console.error("Failed to download csv template:", error);
+                this.error = extractErrorMessage(error, "Terjadi kesalahan saat mengunduh template");
                 return false;
             } finally {
                 this.loading = false;

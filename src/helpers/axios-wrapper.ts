@@ -100,8 +100,10 @@ function request(method: HttpMethod): RequestFn {
         }, delay);
       }
 
-      // attach status
-      response.data.status = response.status;
+      // attach status (skip primitive payloads, e.g. raw file/text downloads)
+      if (response.data && typeof response.data === "object") {
+        response.data.status = response.status;
+      }
 
       // ✅ cast ke generic type
       return response.data as T;
